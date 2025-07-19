@@ -1,0 +1,54 @@
+@font-face {
+    font-family: 'SignPainter';
+    src: url('fonds/SignPainterHouseScript.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Pricedown';
+    src: url('fonds/pricedown.ttf') format('truetype');
+}
+
+
+body {
+    background-color: transparent;
+    overflow: hidden;
+}
+
+#progressbar-container {
+    position: absolute;
+    top: 97.5%; /* Zentriert vertikal */
+    left: 50%; /* Zentriert horizontal */
+    transform: translate(-50%, -50%); /* Korrigiert die Zentrierung */
+    width: 800px; /* Breite der Progressbar */
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: white; /* Textfarbe */
+    display: none; /* Standardmäßig ausgeblendet */
+}
+
+#progressbar-text {
+    font-family: 'Pricedown', sans-serif;
+    font-size: 30px;
+    margin-bottom: 5px; /* Abstand zwischen Text und Progressbar */
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.7); /* Optional: leichter Schatten für bessere Lesbarkeit */
+}
+
+#progressbar-wrapper {
+    height: 2px;
+    /*border: 1px solid white;*/
+    outline: 1px solid rgba(0, 0, 0, 0.199);
+    box-sizing: border-box;
+    /* REMOVE THIS LINE: overflow: hidden; */
+    position: relative;
+}
+
+#progressbar-inner {
+    height: 100%;
+    width: 0%;
+    background-color: red;
+    /* Adjust these values for a stronger, larger glow */
+    box-shadow: 0 0 10px 6px rgba(255, 0, 0, 0.9); /* Increased blur and spread, higher opacity */
+    transition: width linear;
+    position: absolute;
+    left: 0;
+    top: 0;
+}

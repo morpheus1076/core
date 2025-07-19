@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player HUD</title>
+    <link rel="stylesheet" href="hud.css">
+    <link rel="stylesheet" href="ganghud.css">
+</head>
+<body>
+    <div id="hud">
+        <div id="server-name-container">
+            <span id="server-short" class="hud-text"></span>
+            <span id="server-full" class="hud-text"></span>
+        </div>
+        <div class="hud-row">
+            <span id="server-id" class="hud-text"></span>
+            <!--span id="player-count" class="hud-text"></span!-->
+        </div>
+        <div class="hud-row">
+            <span id="date" class="hud-text"></span>
+            <span id="time" class="hud-text"></span>
+        </div>
+        <div class="hud-row">
+            <span id="job-name" class="hud-text"></span>
+            <span id="job-grade" class="hud-text"></span>
+        </div>
+        <div class="hud-row">
+            <span id="speedmeter" class="hud-text"></span>
+            <span id="kmh" class="kmh-text">kmH</span>
+            <span id="fuel" class="hud-text"></span>
+            <span id="plate-text" class="hud-text"></span>
+        </div>
+        <div id="fuel-container">
+            <div id="fuel-bar-bg">
+                <div id="fuel-bar"></div>
+            </div>
+            <img id="fuel-icon" src="images/jerrycan.png" alt="Fuel Icon">
+        </div>
+        <div id="hunger-container">
+            <div id="hunger-bar-bg">
+                <div id="hunger-bar"></div>
+            </div>
+            <img id="hunger-icon" src="images/burger.png" alt="Hunger Icon">
+        </div>
+        <div id="thirst-container">
+            <div id="thirst-bar-bg">
+                <div id="thirst-bar"></div>
+            </div>
+            <img id="thirst-icon" src="images/water.png" alt="Durst Icon">
+        </div>
+        <div id="seatbelt-container">
+            <img id="seatbelt-icon" src="images/seatbelt.png" alt="Gurt Icon">
+        </div>
+        <div id="health-container">
+            <div id="health-bar-bg">
+                <div id="health-bar"></div>
+            </div>
+            <img id="health-icon" src="images/redheart.png" alt="Health Icon">
+        </div>
+        <div id="armour-container">
+            <div id="armour-bar-bg">
+                <div id="armour-bar"></div>
+            </div>
+            <img id="armour-icon" src="images/armour.png" alt="Armour Icon">
+        </div>
+        <!--div id="stamina-container">
+            <div id="stamina-bar-bg">
+                <div id="stamina-bar"></div>
+            </div>
+            <img id="stamina-icon" src="images/stamina.png" alt="Stamina Icon">
+        </div!-->
+        <!--div id="menu">
+            <div id="tabs">
+                <div class="tab" data-tab="1">Job</div>
+                <div class="tab" data-tab="2">Privat</div>
+                <div class="tab" data-tab="3">Sonstige</div>
+            </div>
+            <div id="content">
+                <div class="menu-content" data-tab="1">Job</div>
+                <div class="menu-content" data-tab="2">Privat</div>
+                <div class="menu-content" data-tab="3">Sonstige</div>
+            </div>
+        </div!-->
+        <!--div id="ganghud">
+            <div id="header-container">
+                <span id="gangname" class="header-text">LS Vagos</span>
+                <span id="gangrang" class="header-text">Boss</span>
+                <span id="playername" class="header-text">Cyrus Bradshaw</span>
+                <span id="kontostand" class="header-text">Konto: $150.000</span>
+                <img id="ganglogo" src="images/vagos.png" alt="Gang Logo">
+                <img id="bgbild" src="images/bg_imagegang.png" alt="BG Bild">
+                <div id="button-container">
+                    <button id="member-button" onclick="members()">Mitglieder</button>
+                    <button id="fahrzeuge-button" onclick="fahrzeuge()">Fahrzeuge</button>
+                    <button id="verwaltung-button" onclick="members()">Verwealtung</button>
+                </div>
+            </div>
+        </div!-->
+    </div>
+    <div id="server-logo">
+        <img src="images/logo.png" alt="Server Logo" />
+    </div>
+    <div id="progressbar-container" style="display: none;">
+        <div id="progressbar-text"></div>
+        <div id="progressbar-wrapper">
+            <div id="progressbar-inner"></div>
+        </div>
+    </div>
+
+    <script src="hud.js"></script>
+    <script src="ganghud.js"></script>
+</body>
+</html>

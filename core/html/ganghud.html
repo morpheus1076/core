@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gang HUD</title>
+    <link rel="stylesheet" href="ganghud.css">
+</head>
+<body>
+    <div id="ganghud">
+        <div id="header-container">
+            <span id="gangname" class="header-text">LS Vagos</span>
+            <span id="gangrang" class="header-text">Boss</span>
+            <span id="playername" class="header-text">Cyrus Bradshaw</span>
+            <span id="kontostand" class="header-text">Konto: $150.000</span>
+        </div>
+        <div id="button-container">
+            <button id="member-button" onclick="members()">Mitglieder</button>
+            <button id="fahrzeuge-button" onclick="fahrzeuge()">Fahrzeuge</button>
+            <button id="zwei-button" onclick="members()">Mitglieder</button>
+        </div>
+        <div id="content">
+            <img id="ganglogo" src="images/vagos.png" alt="Gang Logo">
+            <img id="bgbild" src="images/bg_imagegang.png" alt="BG Bild">
+        </div>
+    </div>
+    <script src="ganghud.js"></script>
+</body>
+</html>
