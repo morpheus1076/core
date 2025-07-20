@@ -44,6 +44,7 @@ return {
     PaycheckUse = true,              -- Paychecksystem nutzen
     FreeGargeUse = true,             -- Eigenes Garagensystem nutzen
     HousingUse = true,               -- Eigenes Housing System nutzen
+    HospitalUse = true,              -- Hospital NPCs für Heilung gegen Geld.
 
     commandlist = {
         {command = 'commands', nutzen = 'Liste aller eigenen Commands.'},

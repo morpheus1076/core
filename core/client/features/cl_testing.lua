@@ -21,3 +21,13 @@ RegisterCommand("bucket", function()
     local StateBucket = lib.callback.await('testing:GetBucket')
     Mor.Notify('Aktueller Bucket: '..StateBucket)
 end, false)
+
+RegisterCommand("health50", function()
+    SetEntityHealth(PlayerPedId(), 100)
+end, false)
+
+
+RegisterCommand("gethealth", function()
+    local plyhealth = GetEntityHealth(PlayerPedId())
+    Mor.Notify(plyhealth)
+end, false)

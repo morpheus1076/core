@@ -145,7 +145,6 @@ end)
 
 lib.callback.register('playergroupblips', function(source)
     local allplayers = Ox.GetPlayers()
-    print(json.encode(allplayers))
     local player = Ox.GetPlayer(source)
     local souPlayer = MySQL.query.await('SELECT name FROM character_groups WHERE `charId` = ? AND `isActive` = ?;',{player.charId, true})
     if souPlayer == nil or (type(souPlayer) == "table" and next(souPlayer) == nil) then return end
@@ -158,9 +157,8 @@ lib.callback.register('playergroupblips', function(source)
             local groupLabel = MySQL.query.await('SELECT `label` FROM `ox_groups` WHERE `name` = ?', { plyGroup })
             local grpplayer = Ox.GetPlayer(allplayers[i].source)
             local playername = grpplayer.get('fullname')
-            print(json.encode(playername))
             if getcolor == nil or (type(getcolor) == "table" and next(getcolor) == nil) then return end
-            local myGroup = {coords = allplayers[i].getCoords(), color = getcolor[1].colour, name = playername[i].fullName, label = groupLabel[1].label}
+            local myGroup = {coords = allplayers[i].getCoords(), color = getcolor[1].colour, name = playername[1].fullName, label = groupLabel[1].label}
             return myGroup
         end
     end
