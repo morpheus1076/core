@@ -144,24 +144,27 @@ lib.callback.register('jobabfrage', function(source)
 end)
 
 lib.callback.register('playergroupblips', function(source)
+    local myGroup = {}
     local allplayers = Ox.GetPlayers()
     local player = Ox.GetPlayer(source)
     local souPlayer = MySQL.query.await('SELECT name FROM character_groups WHERE `charId` = ? AND `isActive` = ?;',{player.charId, true})
     if souPlayer == nil or (type(souPlayer) == "table" and next(souPlayer) == nil) then return end
     local plyGroup = souPlayer[1].name
     for i=1, #allplayers do
-        local alljobs = MySQL.query.await('SELECT name FROM character_groups WHERE `charId` = ? AND `isActive` = ?;',{allplayers[i].charId, true})
-        local servGroup = alljobs[1].name
+        local alljobs = MySQL.query.await('SELECT `name` FROM `character_groups` WHERE `charId` = ? AND `isActive` = ?;',{allplayers[i].charId, true})
+        if alljobs then
+            servGroup = alljobs[1].name
+        end
         if plyGroup == servGroup then
             local getcolor = MySQL.query.await('SELECT `colour` FROM `ox_groups` WHERE `name` = ?', { plyGroup })
             local groupLabel = MySQL.query.await('SELECT `label` FROM `ox_groups` WHERE `name` = ?', { plyGroup })
             local grpplayer = Ox.GetPlayer(allplayers[i].source)
             local playername = grpplayer.get('fullname')
             if getcolor == nil or (type(getcolor) == "table" and next(getcolor) == nil) then return end
-            local myGroup = {coords = allplayers[i].getCoords(), color = getcolor[1].colour, name = playername[1].fullName, label = groupLabel[1].label}
-            return myGroup
+            table.insert(myGroup, {coords = allplayers[i].getCoords(), color = getcolor[1].colour, name = playername[1].fullName, label = groupLabel[1].label})
         end
     end
+    return myGroup
 end)
 
 -- vehicles

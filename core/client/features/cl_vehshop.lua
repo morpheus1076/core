@@ -81,6 +81,14 @@ CreateThread(function()
         {title = 'Boote', menu = 'boats', icon = 'bars', arrow = true},
         }
     })
+    lib.registerContext({
+        id = 'planesmenu',
+        title = 'Flugzeughandel',
+        options = {
+        {title = 'Flugzeuge', menu = 'planes', icon = 'bars', arrow = true},
+        {title = 'Hubschrauber', menu = 'helicopters', icon = 'bars', arrow = true},
+        }
+    })
 end)
 
 CreateThread(function()

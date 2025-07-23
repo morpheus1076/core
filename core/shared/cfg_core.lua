@@ -179,6 +179,10 @@ return {
         {name = 'Arbeitsbereich', inuse = 'no', coords = vec3(2524.370, 4119.965, 38.918), gebiet = 'Grapeseed', datei = "mlo_gcom_workshop"},
         {name = 'Antique Bar', inuse = 'no', coords = vec3(-543.893, -48.952, 42.420), gebiet = 'Burton', datei = "mlo_ds_antique_bar"},
         {name = 'Waschsalon', inuse = 'no', coords = vec3(892.221, -1039.358, 35.252), gebiet = 'La Mesa', datei = "mlo_lev_laundromat"},
+        {name = 'Haus', inuse = 'no', coords = vec3(1105.320, -411.420, 67.606), gebiet = 'Mirror Park', datei = "keine/mlo_mrp_house"},
+        {name = 'Haus', inuse = 'no', coords = vec3(904.248, -485.282, 59.470), gebiet = 'Mirror Park', datei = "keine/mlo_mrp_house"},
+        {name = 'Haus', inuse = 'no', coords = vec3(957.673, -671.112, 58.489), gebiet = 'Mirror Park', datei = "keine/mlo_mrp_house"},
+        {name = 'Haus', inuse = 'no', coords = vec3(918.080, -566.466, 58.412), gebiet = 'Mirror Park', datei = "keine/mlo_mrp_house"},
     },
 
     Multiplier = {

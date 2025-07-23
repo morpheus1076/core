@@ -2,6 +2,8 @@ local config = require 'shared.cfg_sitting'
 local isSitting = false
 local sitentities = {}
 
+
+
 local breaksit = lib.addKeybind({
     name = 'breaksitting',
     description = 'drücke x um das Sitzen abzubrechen.',
@@ -9,7 +11,7 @@ local breaksit = lib.addKeybind({
     disabled = true,
     onPressed = function(self)
         local ped = PlayerPedId()
-        ClearPedTasksImmediately(ped)
+        ClearPedTasks(ped)
         isSitting = false
     end,
     onReleased = function(self)
@@ -21,7 +23,7 @@ function KeyDisable()
     breaksit:disable(true)
 end
 
-function SitOnChair(chair)
+local function SitOnChair(chair)
     local ped = PlayerPedId()
     if IsPedInAnyVehicle(ped, false) then return end
     if isSitting then return end
@@ -54,42 +56,17 @@ function SitOnChair(chair)
 
 end
 
-local function AddTargetToNearbyChairs()
-    local playerCoords = GetEntityCoords(PlayerPedId())
-    local chairs = GetGamePool('CObject')
-
-    for _, obj in ipairs(chairs) do
-        local model = GetEntityModel(obj)
-        for _, prop in ipairs(config) do
-            if model == GetHashKey(prop.prop) and #(playerCoords - GetEntityCoords(obj)) < 5.0 then
-                local chairEntity = exports.ox_target:addLocalEntity(obj, {
-                    {
-                        name = 'sit_on_chair'..model,
-                        icon = 'fa-chair',
-                        label = 'Hinsetzen',
-                        onSelect = function(data)
-                            SitOnChair(data.entity)
-                        end
-                    }
-                })
-                table.insert(sitentities, chairEntity)
-                break
-            end
-        end
-    end
+for i=1, #config do
+    exports.ox_target:addModel(config[i].prop, {
+        {
+            name = 'sit_on_chair',
+            icon = 'fa-chair',
+            label = 'Hinsetzen',
+            onSelect = function(data)
+                SitOnChair(data.entity)
+            end,
+            showWarning = false
+        }
+    })
+    Wait(200)
 end
-
-local function TargetScan()
-    while true do
-        for i=1, #sitentities do
-            exports.ox_target:removeEntity(sitentities[i], 'sit_on_chair')
-        end
-        chairs = {}
-        AddTargetToNearbyChairs()
-        Wait(10000)
-    end
-end
-
-AddEventHandler('ox:playerLoaded', function(playerId, isNew)
-    TargetScan()
-end)

@@ -133,7 +133,7 @@ ConfigVehShop.Vehshops = {
         category = {'boats'},
         --- BLIP
         sprite = 410,
-        color = 3,
+        color = 28,
         scale = 0.5,
         hidden = true,
         blipenabled = true,
@@ -150,6 +150,32 @@ ConfigVehShop.Vehshops = {
         --- Fahrzeug spawn
         spawnpoint = {coords = {-728.277, -1356.242, 2.112}, heading = 135.012},
         shopmenu = 'boatsmenu'
+    },
+    {
+        id = 'planes',
+        name = 'Flugzeuge',
+        type = 'planes',
+        coords = vec3(-1237.267, -3386.251, 13.940),
+        category = {'planes', 'helicopters'},
+        --- BLIP
+        sprite = 423,
+        color = 28,
+        scale = 0.5,
+        hidden = true,
+        blipenabled = true,
+        --- PED
+        ped ='a_m_y_business_02',
+        pedhash = 0xB3B3F5E6,
+        scenario = 'WORLD_HUMAN_AA_SMOKE',
+        pedenabled = true,
+        pedheading =  42.429,
+        --- TARGET
+        size = {1.5,1.5,1.5},
+        heading = 0,
+        options = {name = 'Flugzeughandel', onSelect = function() lib.showContext('planesmenu')  end, icon = 'fas fa-dollar', iconColor = '#008000', label = 'Verkäufer ansprechen'},
+        --- Fahrzeug spawn
+        spawnpoint = {coords = {-1260.726, -3356.417, 13.94}, heading = 325.385},
+        shopmenu = 'planesmenu'
     },
 }
 
@@ -169,11 +195,11 @@ ConfigVehShop.Menu = {
     {category = 'coupes', menulabel = 'Coupes', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
     {category = 'cycles', menulabel = 'Fahrräder', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
     {category = 'emergency', menulabel = 'Einsatzfahrzeuge', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
-    {category = 'helicopters', menulabel = 'Helikopter', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
+    {category = 'helicopters', menulabel = 'Helikopter', shopmenu = 'planesmenu', hmenu = 'Flugzeughandel'},
     {category = 'industrial', menulabel = 'Industrial', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
     {category = 'military', menulabel = 'Militär', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
     {category = 'openwheel', menulabel = 'Open Wheel', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
-    {category = 'planes', menulabel = 'Flugzeuge', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
+    {category = 'planes', menulabel = 'Flugzeuge', shopmenu = 'planesmenu', hmenu = 'Flugzeughandel'},
     {category = 'service', menulabel = 'Service', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
     {category = 'trains', menulabel = 'Züge', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
     {category = 'utility', menulabel = 'Utility', shopmenu = 'pdmcitymenu', hmenu = 'PDM City'},
