@@ -13,14 +13,14 @@ CreateThread(function()
                 Wait(6000)
             else
                 for _,v in pairs (invtrocknung) do
-                    if v.name == 'afghanzweig' then
+                    if v.name == 'afghan_wet' then
                         count = v.count
                     end
                 end
                 if (count >= ((icount*time)+10)) then
-                    if Mor.Inv:canCarry('vagos_trocken', 'afghandry', tcount * time) then
-                        Mor.Inv:remove('vagos_feuchtablage', 'afghanzweig', icount * time)
-                        Mor.Inv:add('vagos_trocken', 'afghandry', tcount * time)
+                    if Mor.Inv:canCarry('vagos_trocken', 'afghan_dry', tcount * time) then
+                        Mor.Inv:remove('vagos_feuchtablage', 'afghan_wet', icount * time)
+                        Mor.Inv:add('vagos_trocken', 'afghan_dry', tcount * time)
                     end
                 end
             end

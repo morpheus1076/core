@@ -293,3 +293,80 @@ AddEventHandler('startstop', function()
 		end
 	end
 end)
+
+--- Mileage, OilLevel .... Wheels/Tyres???
+local lastPos = nil
+local totalDistance = 0
+local updateInterval = 20000 -- alle 10 Sekunden
+
+lib.onCache('vehicle', function(vehicle, oldValue)
+    if vehicle ~= false then
+        CreateThread(function()
+            while true do
+                Wait(updateInterval)
+                local ped = PlayerPedId()
+                if IsPedInAnyVehicle(ped, false) then
+                    local veh = vehicle
+                    if GetPedInVehicleSeat(veh, -1) == ped then
+                        local plate = GetVehicleNumberPlateText(veh)
+                        local coords = GetEntityCoords(veh)
+                        if lastPos then
+                            local distance = #(coords - lastPos)
+                            totalDistance = totalDistance + distance
+                            local km = distance / 1000.0
+                            TriggerServerEvent("mileage:update", plate, km)
+                        end
+                        lastPos = coords
+                    end
+                else
+                    lastPos = nil
+                end
+            end
+        end)
+        CreateThread(function()
+            local lastPosOil = nil
+            local totalDistanceOilLevel = 0
+            local oildistance = 0
+            local oilLevel = 0
+            while true do
+                local ped = PlayerPedId()
+                local veh = vehicle
+                if GetPedInVehicleSeat(veh, -1) == ped then
+                    local plate = GetVehicleNumberPlateText(veh)
+                    local coords = GetEntityCoords(veh)
+                    local getOilLevel = lib.callback.await('GetVehicleOilLevel', source, plate)
+                    oilLevel = getOilLevel
+                    SetVehicleOilLevel(veh, getOilLevel)
+                    if lastPosOil then
+                        oildistance = #(coords - lastPosOil)
+                        totalDistanceOilLevel = totalDistanceOilLevel + oildistance
+                        local km = oildistance / 1000.0
+                    end
+                    lastPosOil = coords
+                    if totalDistanceOilLevel >= 10000 then
+                        local setLevel = oilLevel -0.0005
+                        SetVehicleOilLevel(veh, setLevel)
+                        totalDistanceOilLevel = 0
+                        oildistance = 0
+                        oilLevel = GetVehicleOilLevel(veh)
+                        TriggerServerEvent("mileage:oillevelupdate", plate, oilLevel)
+                    end
+                else
+                    lastPosOil = nil
+                end
+                Wait(30000)
+            end
+        end)
+    end
+end)
+
+RegisterCommand("vehdata", function()
+    local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+    if veh == 0 then return print("Du sitzt in keinem Fahrzeug.") end
+    local plate = GetVehicleNumberPlateText(veh)
+    local oilLevel = GetVehicleOilLevel(veh)
+    print(("Aktueller Öl Stand: %.2f Liter"):format(oilLevel))
+    lib.callback("mileage:get", false, function(km)
+        print(("Aktuelle Laufleistung: %.2f km"):format(km))
+    end, plate)
+end, false)

@@ -84,7 +84,7 @@ function AuswahlMenu()
             {
                 title = 'Persönlicher Verkauf',
                 description = 'Aus Deinen Taschen verkaufen.',
-                icon = 'face',
+                icon = 'user',
                 onSelect = function()
                     SellShopEnter()
                 end
@@ -134,7 +134,7 @@ function SellShopVehicleEnter()
                 Wait(20)
                 local count = lib.callback.await('InvItemCount', source, plate, item.item)
                 if count == nil or (type(count) == "table" and next(count) == nil) then
-                    --Notify('Fehler beim Verkauf.')
+                    print('Fehler beim Verkauf.')
                 else
                     if count > 0 then
                         local price = math.random(item.minprice, item.maxprice)

@@ -9,5 +9,5 @@ return {
         {prop = 'v_med_bed2', offsetX = 0.0, offsetY = 0.000, offsetZ = 1.635, scenarion = 'WORLD_HUMAN_SUNBATHE_BACK'},
         {prop = 'v_club_officechair', offsetX = 0.0, offsetY = 0.035, offsetZ = 0.5, scenarion = 'PROP_HUMAN_SEAT_CHAIR_MP_PLAYER'},
         {prop = 'prop_bar_stool_01', offsetX = 0.0, offsetY = 0.135, offsetZ = 0.82, scenarion = 'PROP_HUMAN_SEAT_CHAIR_UPRIGHT'},
-        --{prop = 'sm_prop_offchair_smug_01', offsetX = 0.0, offsetY = 0.050, offsetZ = -0.08, scenarion = 'PROP_HUMAN_SEAT_CHAIR_MP_PLAYER'},
+        {prop = 'prop_table_01_chr_a', offsetX = 0.0, offsetY = 0.135, offsetZ = 0.0, scenarion = 'PROP_HUMAN_SEAT_CHAIR_MP_PLAYER'},
 }

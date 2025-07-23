@@ -8,16 +8,16 @@ CreateThread(function()
         while true do
             Wait(minuten)
             local paycheckamount = lib.callback.await('paycheck', source)
-            if paycheckamount == 'erhalten' then
+            if paycheckamount ~= 0 then
                 local msg = {
                     title = '~w~Gehaltszahlung',
                     subtitle = "~b~Bankeinzahlung.",
-                    text = '~w~Dein Gehalt wurde ~g~überwiesen.',
+                    text = '~w~Dein Gehalt ~y~$'..paycheckamount.. '~w~ wurde ~g~überwiesen.',
                     duration = 0.4,
                     pict = 'CHAR_BANK_FLEECA',
                 }
                 Mor.PostFeed(msg)
-            elseif paycheckamount == 'keinGeld' then
+            elseif paycheckamount == 0 then
                 local msg = {
                     title = '~w~Gehaltszahlung',
                     subtitle = "~y~Firma hat ~r~KEIN ~y~Geld.",

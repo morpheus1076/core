@@ -347,5 +347,42 @@ return {
             blipscale = 0.3,
             bliphidden = true,
         },
+        {
+            zone = {
+                vec3(-3552.948, 6327.033, 10.529),
+                vec3(-3566.877, 6309.578, 10.313),
+                vec3(-3571.864, 6314.583, 9.490),
+                vec3(-3558.958, 6331.132, 9.804),
+            },
+            reihen = {
+                {start = vec3(-3554.986, 6326.988, 10.369), ende = vec3(-3566.970, 6311.572, 10.110), objhash = 'h4_prop_weed_01_plant', distance = 2},
+                {start = vec3(-3568.851, 6312.709, 9.777), ende = vec3(-3556.769, 6328.526, 10.166), objhash = 'h4_prop_weed_01_plant', distance = 3},
+                {start = vec3(-3558.413, 6330.145, 9.947), ende = vec3(-3569.991, 6314.743, 9.617), objhash = 'h4_prop_weed_01_plant', distance = 2},
+            },
+            ident = 'weed01',
+            label = 'Weed 01',
+            centercoords = vec3(-3563.935, 6318.132, 9.860),
+            objProp = 'h4_prop_weed_01_plant',
+            radius = 50,
+            thickness = 10,
+            debug = false,
+            item = 'afghanzweig', -- Item was geerntet wird.
+            needs = 'schere', -- Item was zum ernten benötigt wird.
+            needslabel = 'Schere',
+            duration = 12000,
+            minamount = 2,
+            maxamount = 5,
+            anim = false, ---false = Scenario, true = animation
+            animation = "amb@prop_human_movie_bulb@idle_a",
+            animdict = "idle_b",
+            scenario = "PROP_HUMAN_BUM_BIN",
+            maxcount = 10,
+            noBlip = true,
+            blipname = 'Feld',
+            blipsprite = 649,
+            blipcolor = 1,
+            blipscale = 0.3,
+            bliphidden = true,
+        },
     }
 }

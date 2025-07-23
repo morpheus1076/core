@@ -14,3 +14,15 @@ lib.callback.register('testing:GetBucket', function()
     print(bucket)
     return bucket
 end)
+
+--local testEntities = {}
+
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if (GetCurrentResourceName() ~= resourceName) then return end
+    --[[if #testEntities > 0 then
+        for i=1, #testEntities do
+            DeleteEntity(testEntities[i])
+        end
+    end]]
+end)

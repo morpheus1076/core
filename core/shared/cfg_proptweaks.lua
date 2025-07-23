@@ -50,4 +50,6 @@ Ceeb.props = {
     [`prop_streetlight_14a`]     = { { mode = FREEZE } }, -- Straßenlaterne
     [`prop_phonebox_01b`]        = { { mode = FREEZE } }, -- Telefonzelle
     [`prop_parknmeter_01`]       = { { mode = FREEZE } }, -- Parkuhr
+    [`prop_table_01_chr_a`]      = { { mode = FREEZE } }, -- Stühle z:Bsp. Little Teapot außen.
+    [`prop_table_01`]            = { { mode = FREEZE } }, -- Tisch z:Bsp. Little Teapot außen.
 }
