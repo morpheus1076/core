@@ -161,7 +161,7 @@ lib.callback.register('playergroupblips', function(source)
             local grpplayer = Ox.GetPlayer(allplayers[i].source)
             local playername = grpplayer.get('fullname')
             if getcolor == nil or (type(getcolor) == "table" and next(getcolor) == nil) then return end
-            table.insert(myGroup, {coords = allplayers[i].getCoords(), color = getcolor[1].colour, name = playername[1].fullName, label = groupLabel[1].label})
+            table.insert(myGroup, {coords = allplayers[i].getCoords(), color = getcolor[1].colour, name = playername, label = groupLabel[1].label})
         end
     end
     return myGroup

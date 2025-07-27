@@ -49,25 +49,29 @@ end
 local function CreateVehList(data)
     vehList = {}
     local garage
+    local yes = '🟢'
+    local no = '🔴'
+    local symbol = ''
     if not data then return end
-    for _,v in pairs(data) do
-        local vehdata = Ox.GetVehicleData(v.model)
+    for i=1, #data do
+        local vehdata = Ox.GetVehicleData(data[i].model)
         if vehdata then
-            for _,k in pairs (garagen) do
-                if v.garage == k.name then
-                    garage = k.label
-                    break
-                else
+            for k=1, #garagen do
+                if data[i].garage == garagen[k].name then
+                    symbol = yes
+                    garage = garagen[k].label
+                end
+                if data[i].garage == 'spawned' then
+                    symbol = no
                     garage = 'ausgeparkt'
-                    break
                 end
             end
         end
         table.insert(vehList, {
-            title = 'Fahrzeug: '..vehdata.name,
-            description = 'Garage: '..garage or 'Garage: '..'ausgeparkt.',
+            title = ''..symbol..' Fahrzeug: '..vehdata.name,
+            description = 'Garage: '..garage..'\n  Kennzeichen: '..data[i].plate,
             readOnly = true,
-            image = "nui://core/images/"..v.model..".png",
+            image = "nui://core/images/"..data[i].model..".png",
         })
     end
     return vehList
@@ -151,7 +155,7 @@ local function GruppeVerlassen()
     })
     local groupverlassen= lib.callback.await('gruppeverlassen', source, input)
     if groupverlassen then
-        Mor.Notify('Gruppe verlassen.')
+        Mor.Notify('Gruppe ~g~verlassen.')
     else
         Mor.Notify('~w~Gruppe ~r~nicht ~w~verlassen.')
     end
@@ -305,6 +309,68 @@ local function Pedtragen(ped)
     end
 end
 
+local function FirmaManagement()
+    print('Menu Firam')
+    local aktGroup = lib.callback.await('jobabfrage', source)
+    local allGroups = lib.callback.await('morlib:GetAllGroups')
+
+    lib.registerContext({
+        id = 'firma_menu',
+        title = 'Firma',
+        menu = 'persoenlichesmenu',
+        options = {
+            {
+                title = 'Aktuelle Firma: '..aktGroup[1],
+                icon = 'user',
+                disabled = true,
+            },
+            {
+                title = 'Firma wechseln',
+                icon = 'business-time',
+                onSelect = function()
+                    grpList = {}
+                    for i=1, #allGroups do
+                        local group = lib.callback.await('morlib:GetLabels', source, allGroups[i].name, allGroups[i].grade)
+                        if group == nil or (type(group) == "table" and next(group) == nil) then return end
+                        Wait(100)
+                        table.insert(grpList, {
+                            title = group.grouplabel,
+                            icon = 'user-group',
+                            description = group.ranklabel,
+                            onSelect = function()
+                                local setAktGroup = lib.callback.await('SetAktivGroup', source, group.groupname)
+                                Wait(200)
+                                if setAktGroup then
+                                    Mor.Notify('Firma ~g~gewechselt')
+                                else
+                                    Mor.Notify('~r~Fehler ~w~beim wechsel der Firma')
+                                end
+                            end,
+                        })
+
+                    end
+                    Wait(200)
+                    lib.registerContext({
+                        id = 'firma_wechsel_menu',
+                        title = 'Firma wechseln',
+                        menu = 'persoenlichesmenu',
+                        options = grpList,
+                    })
+                    lib.showContext('firma_wechsel_menu')
+                end,
+            },
+            {
+                title = 'Firma verlassen',
+                icon = 'briefcase',
+                onSelect = function()
+                    GruppeVerlassen()
+                end,
+            },
+        }
+    })
+    lib.showContext('firma_menu')
+end
+
 local function MenuSelect()
     local isAdmin = lib.callback.await('CallAdmincheck')
     local player = Ox.GetPlayer(PlayerId())
@@ -312,6 +378,7 @@ local function MenuSelect()
     local aktGroup = lib.callback.await('jobabfrage', source)
     local plyData, plyDate = lib.callback.await('Personendatenabfrage', source)
     local allGroups = lib.callback.await('morlib:GetAllGroups')
+
     vehList = CreateVehList(plyAllVehicles)
 
     if plyData == nil or (type(plyData) == "table" and next(plyData) == nil) then return end
@@ -411,7 +478,11 @@ local function MenuSelect()
                 {
                     title = 'Firma',
                     description = 'Deine Firma',
-                    menu = 'firma_menu',
+                    arrow = true,
+                    onSelect = function()
+                        FirmaManagement()
+                    end,
+                    --menu = 'firma_menu',
                     icon = 'bars'
                 },
                                 {
@@ -442,7 +513,7 @@ local function MenuSelect()
 
     lib.registerContext({
         id = 'vehgarage_menu',
-        title = 'Deine Fahrzeuge',
+        title = '🚗 Deine Fahrzeuge 🚗',
         menu = 'persoenlichesmenu',
         options = vehList,
     })
@@ -469,61 +540,6 @@ local function MenuSelect()
                 icon = 'truck',
                 iconColor = 'white',
                 menu = 'vehgarage_menu',
-            },
-        }
-    })
-
-    lib.registerContext({
-        id = 'firma_menu',
-        title = 'Firma',
-        menu = 'persoenlichesmenu',
-        options = {
-            {
-                title = 'Aktuelle Firma: '..aktGroup[1],
-                icon = 'user',
-                disabled = true,
-            },
-            {
-                title = 'Firma wechseln',
-                icon = 'business-time',
-                onSelect = function()
-                    grpList = {}
-                    for i=1, #allGroups do
-                        local group = lib.callback.await('morlib:GetLabels', source, allGroups[i].name, allGroups[i].grade)
-                        if group == nil or (type(group) == "table" and next(group) == nil) then return end
-                        Wait(100)
-                        table.insert(grpList, {
-                            title = group.grouplabel,
-                            icon = 'user-group',
-                            description = group.ranklabel,
-                            onSelect = function()
-                                local setAktGroup = lib.callback.await('SetAktivGroup', source, group.groupname)
-                                Wait(200)
-                                if setAktGroup then
-                                    Mor.Notify('Firma ~g~gewechselt')
-                                else
-                                    Mor.Notify('~r~Fehler ~w~beim wechsel der Firma')
-                                end
-                            end,
-                        })
-
-                    end
-                    Wait(200)
-                    lib.registerContext({
-                        id = 'firma_wechsel_menu',
-                        title = 'Firma wechseln',
-                        menu = 'persoenlichesmenu',
-                        options = grpList,
-                    })
-                    lib.showContext('firma_wechsel_menu')
-                end,
-            },
-            {
-                title = 'Firma verlassen',
-                icon = 'briefcase',
-                onSelect = function()
-                    GruppeVerlassen()
-                end,
             },
         }
     })

@@ -31,7 +31,7 @@ AddEventHandler('ox:playerLoaded', function(playerId, userId, charId)
     local message = "Spieler: "..player.username.." ist jetzt in der Stadt aktiv."
     local group = player.getGroup(player.getGroups())
     local getFullname = MySQL.query.await('SELECT `fullName` FROM `characters` WHERE `charId`= ?',{player.charId})
-    player.set('fullname', getFullname, true)
+    player.set('fullname', getFullname[1].fullName, true)
     if group == nil then SetGroup(userId) end
     Mor.Log:add('join', message, charId)
     CreateThread(function()

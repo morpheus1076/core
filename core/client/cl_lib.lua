@@ -233,7 +233,7 @@ end
 
 ------------------------------------------------------------------------------
 
-local EPoints = {}
+local EPoints = {}  --ErfahrungsPunkte
 EPoints.__index = EPoints
 
 function EPoints:add(data)
@@ -301,7 +301,7 @@ local function ScFoTe(text, duration, color)
     local scaleform = RequestScaleformMovie("MP_BIG_MESSAGE_FREEMODE")
 
     while not HasScaleformMovieLoaded(scaleform) do
-        Citizen.Wait(0)
+        Wait(0)
     end
 
     BeginScaleformMovieMethod(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
@@ -320,7 +320,7 @@ local function ScFoTe(text, duration, color)
     end)
 end
 
-local function FormatTime(milliseconds)
+local function FormatTime(milliseconds) -- os.Time format in lesbares format umwandeln
     if not milliseconds then return end
     local totalSeconds = milliseconds / 1000
     local minutes = math.floor(totalSeconds / 60)

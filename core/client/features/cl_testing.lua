@@ -27,9 +27,11 @@ RegisterCommand("health50", function()
 end, false)
 
 
-RegisterCommand("gethealth", function()
-    local plyhealth = GetEntityHealth(PlayerPedId())
-    Mor.Notify(plyhealth)
+RegisterCommand("test", function()
+    print('Test Command')
+    local cmdList = GetRegisteredCommands()
+    print(cmdList)
+    print(json.encode(cmdList))
 end, false)
 
 RegisterNetEvent('cl_core:NpcSettings', function(entity)
@@ -43,13 +45,13 @@ lib.onCache('vehicle', function(vehicle, oldValue)
                 Wait(20000)
                 local ped = PlayerPedId()
                 if GetPedInVehicleSeat(vehicle, -1) == ped then
-                    local wheelHealthVL = GetVehicleWheelHealth(vehicle, 0) -- 0 = erstes Rad
+                    local wheelHealthVL = GetVehicleWheelHealth(vehicle, 0)
                     print("Vorderes linkes Rad:", wheelHealthVL)
-                    local wheelHealthVR = GetVehicleWheelHealth(vehicle, 1) -- 0 = erstes Rad
+                    local wheelHealthVR = GetVehicleWheelHealth(vehicle, 1)
                     print("Vorderes rechtes Rad:", wheelHealthVR)
-                    local wheelHealthHL = GetVehicleWheelHealth(vehicle, 2) -- 0 = erstes Rad
+                    local wheelHealthHL = GetVehicleWheelHealth(vehicle, 2)
                     print("Hinteres linkes Rad:", wheelHealthHL)
-                    local wheelHealthHR = GetVehicleWheelHealth(vehicle, 3) -- 0 = erstes Rad
+                    local wheelHealthHR = GetVehicleWheelHealth(vehicle, 3)
                     print("Hinteres rechtes Rad:", wheelHealthHR)
                 else
                     print('Break')
