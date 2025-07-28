@@ -19,7 +19,8 @@ files
     'html/images/*.*',
     'html/sounds/*.*',
     'shared/*.lua',
-    'images/*.*'
+    'images/*.*',
+    'locales/*.json'
 }
 
 shared_script

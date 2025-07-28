@@ -426,4 +426,31 @@ end)
 
 return Mor
 
---- local Mor = require("client.cl_lib") ---
+-- VORLAGEN:::
+--[[
+local Mor = require("client.cl_lib")
+
+local Ped = Mor.NPC:new({
+    model = import.legalPed.model,
+    coords = import.legalPed.coords,
+    heading = import.legalPed.heading,
+    scenario = import.legalPed.scenario,
+    targetable = import.legalPed.targetable,
+    targetoptions = {
+        label = 'Vorlage',
+        name = 'vorlagePed',
+        distance = 2.0,
+        onSelect = function()
+
+        end
+    },
+})
+
+local legalBlip = Mor.Blip:new({
+        coords = import.legalPed.coords,
+        name = import.legalBlip.name,
+        sprite = import.legalBlip.sprite,
+        color = import.legalBlip.color,
+        hidden = import.legalBlip.hidden
+    })
+]]

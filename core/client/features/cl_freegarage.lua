@@ -5,6 +5,7 @@ local garageLoaded = false
 local isRunningWorkaround = false
 local freepBlips = {}
 local Mor = require("client.cl_lib")
+local groupBlipsLoaded = false
 
 local function IsSpawnPointClear(coords, radius)
     return not IsAnyVehicleNearPoint(coords.x, coords.y, coords.z, radius)
@@ -222,8 +223,10 @@ function GarageBase()
         garageLoaded = true
         local points = cfg_garage.Garagen
         local player = Ox.GetPlayer(PlayerId())
-        local groups = player.getGroups()
-        local plygroup = player.getGroup(groups)
+        --local groups = player.getGroups()
+        --local plygroup = player.getGroup(groups)
+        local plyData = player.get('playerdata')
+        local plygroup = plyData.group
         Wait(500)
         for i=1, #points do
             ---NPC---
@@ -418,4 +421,15 @@ CreateThread(function()
     end
 end)
 
-GarageBase()
+--GarageBase()
+
+--groupBlipsLoaded
+
+AddEventHandler('ox:playerLoaded', function(playerId, isNew)
+    Wait(10000)
+    if not groupBlipsLoaded then
+        GarageBase()
+        Wait(500)
+        groupBlipsLoaded = true
+    end
+end)

@@ -40,6 +40,7 @@ local function ShopsStart()
     end
 end
 
-RegisterNetEvent('ClCreateShops', function()
+AddEventHandler('ox:playerLoaded', function(playerId, isNew)
+    Wait(10000)
     ShopsStart()
 end)

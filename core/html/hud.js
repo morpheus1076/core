@@ -2,6 +2,11 @@ let blinkInterval;
 const progressbarContainer = document.getElementById('progressbar-container');
 const progressbarText = document.getElementById('progressbar-text');
 const progressbarInner = document.getElementById('progressbar-inner');
+const idcardContainer = document.getElementById('idcard-container');
+const idcardlastname = document.getElementById('idcard-lastname');
+const idcardfirstname = document.getElementById('idcard-firstname');
+const idcarddatebirth = document.getElementById('idcard-datebirth');
+const idcardid = document.getElementById('idcard-id');
 
 window.addEventListener('message', (event) => {
     const data = event.data;
@@ -221,6 +226,15 @@ window.addEventListener('message', (event) => {
 
     } else if (data.type === 'hideProgressbar') {
         progressbarContainer.style.display = 'none';
+    }
+    if (data.type === 'showIdCard') {
+        idcardfirstname = data.firstname;
+        idcardlastname = data.lastname;
+        idcarddatebirth = data.datebirth;
+        idcardid = data.id;
+        idcardContainer.style.display = 'block';
+    } else if (data.type === 'hideIdCard') {
+        idcardContainer.style.display = 'none';
     }
 });
 // Progressbar

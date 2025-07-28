@@ -1,5 +1,4 @@
 
-
 local Mor = require("server.sv_lib")
 local cfg = require("shared.cfg_core")
 
@@ -28,12 +27,31 @@ end)
 
 AddEventHandler('ox:playerLoaded', function(playerId, userId, charId)
     local player = Ox.GetPlayerFromUserId(userId)
-    local message = "Spieler: "..player.username.." ist jetzt in der Stadt aktiv."
     local group = player.getGroup(player.getGroups())
-    local getFullname = MySQL.query.await('SELECT `fullName` FROM `characters` WHERE `charId`= ?',{player.charId})
-    player.set('fullname', getFullname[1].fullName, true)
+
+    local getFullname = MySQL.query.await('SELECT `fullName`,`firstname`, `lastname`, `dateOfBirth` FROM `characters` WHERE `charId`= ?',{player.charId})
+    local getAktGroup = MySQL.query.await('SELECT `name`, `grade` FROM `character_groups` WHERE `charId` = ? AND `isActive` = ?;',{player.charId, true})
+    local groupLabel = MySQL.query.await('SELECT `label` FROM `ox_groups` WHERE `name`= ?',{getAktGroup[1].name})
+    local getgradelabel = MySQL.query.await('SELECT `label` FROM `ox_group_grades` WHERE `group` = ? AND `grade` = ?;',{getAktGroup[1].name, getAktGroup[1].grade})
+    local timeInSeconds = getFullname[1].dateOfBirth / 1000
+    local charBirth = os.date("%d.%m.%Y", timeInSeconds)
+    local setidcardid = (''..(userId+1000)..' '..(charId+1000)..'')
+    local playerData = {
+        firstname = getFullname[1].firstname,
+        lastname = getFullname[1].lastname,
+        fullname = getFullname[1].fullName,
+        group = getAktGroup[1].name,
+        grade = getAktGroup[1].grade,
+        grouplabel = groupLabel[1].label,
+        gradelabel = getgradelabel[1].label,
+        birth = charBirth,
+        idcardid = setidcardid,
+    }
+    player.set('playerdata', playerData, true)
     if group == nil then SetGroup(userId) end
+    local message = "Spieler: "..player.username.." ist jetzt in der Stadt aktiv."
     Mor.Log:add('join', message, charId)
+
     CreateThread(function()
         while true do
             local allPlayers = Ox.GetPlayers()

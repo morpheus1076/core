@@ -45,6 +45,7 @@ return {
     FreeGargeUse = true,             -- Eigenes Garagensystem nutzen
     HousingUse = true,               -- Eigenes Housing System nutzen
     HospitalUse = true,              -- Hospital NPCs für Heilung gegen Geld.
+    AuftraggeberUse = true,          -- Auftraggeber für Framjobs etc. nutzen?
 
     commandlist = {
         {command = 'commands', nutzen = 'Liste aller eigenen Commands.'},

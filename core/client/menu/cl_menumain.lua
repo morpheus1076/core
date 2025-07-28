@@ -1,9 +1,13 @@
 
+lib.locale()
 local Mor = require('client.cl_lib')
 local cfg = require("shared.cfg_core")
 local garagen = cfg_garage.Garagen
 local isAdmin = lib.callback.await('CallAdmincheck')
 local grpList, vehList = {}, {}
+
+local import = require("shared.cfg_auftraggeber")
+local legalJobs = import.legaljobs
 
 local iplBlipsAktiv = false
 local iplBlips = {}
@@ -95,6 +99,27 @@ local function PedOk()
         player.setStatus('joint', 0)
         player.setStatus('drunk', 0)
     end
+end
+
+local function OffeneAuftraege()
+    local listOptions = {}
+    local aktJobs = lib.callback.await('auftraggeber:auftragabrufen')
+
+    for _,a in ipairs(legalJobs) do
+        for _,k in ipairs(aktJobs) do
+            if a.id == k.id then
+                table.insert(listOptions, {title = a.title, description = 'Liefer '..a.items.amount..'x '..a.items.label..' für '..a.earning..'$.', readOnly = true})
+            end
+        end
+    end
+
+    lib.registerContext({
+        id = 'auftragsliste',
+        title = locale('Order list'),
+        options = listOptions,
+    })
+
+    lib.showContext('auftragsliste')
 end
 
 local function NeueGruppe()
@@ -540,6 +565,14 @@ local function MenuSelect()
                 icon = 'truck',
                 iconColor = 'white',
                 menu = 'vehgarage_menu',
+            },
+            {
+                title = 'Aufträge',
+                icon = 'list',
+                iconColor = 'white',
+                onSelect = function()
+                    OffeneAuftraege()
+                end,
             },
         }
     })

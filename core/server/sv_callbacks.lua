@@ -159,7 +159,8 @@ lib.callback.register('playergroupblips', function(source)
             local getcolor = MySQL.query.await('SELECT `colour` FROM `ox_groups` WHERE `name` = ?', { plyGroup })
             local groupLabel = MySQL.query.await('SELECT `label` FROM `ox_groups` WHERE `name` = ?', { plyGroup })
             local grpplayer = Ox.GetPlayer(allplayers[i].source)
-            local playername = grpplayer.get('fullname')
+            local getname = grpplayer.get('playerdata')
+            local playername = getname.fullname
             if getcolor == nil or (type(getcolor) == "table" and next(getcolor) == nil) then return end
             table.insert(myGroup, {coords = allplayers[i].getCoords(), color = getcolor[1].colour, name = playername, label = groupLabel[1].label})
         end

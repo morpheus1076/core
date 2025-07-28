@@ -49,8 +49,3 @@ end, {
         wasser = true,
 	  },
 })
-
-AddEventHandler('ox:playerLoaded', function(playerId, userId, charId)
-    Wait(2000)
-    TriggerClientEvent('ClCreateShops', playerId)
-end)

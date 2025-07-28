@@ -111,7 +111,17 @@ CreateThread(function()
     end
 end)
 
-CreateThread(function()
+AddEventHandler('ox:statusTick', function(statuses)
+    --print(json.encode(statuses))
+    local hungerLevel = statuses.hunger
+    local thirstLevel = statuses.thirst
+    SendNUIMessage({
+        action = "updateStatus",
+        hungerLevel = hungerLevel,
+        thirstLevel = thirstLevel
+    })
+end)
+--[[CreateThread(function()
     while true do
         Wait(5000)
         local player = Ox.GetPlayer(PlayerId())
@@ -124,7 +134,7 @@ CreateThread(function()
             thirstLevel = thirstLevel
         })
     end
-end)
+end)]]
 
 RegisterNetEvent('SetSeatbelt')
 AddEventHandler('SetSeatbelt', function(status)

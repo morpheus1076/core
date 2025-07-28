@@ -12,6 +12,18 @@ return {
             distance = 1.5,
             debug = false
         },
+        einkauf2 = {
+            id = 'einkauf_lager_02',
+            type = 'stash',
+            label = 'Einkaufslager 02 Illegal',
+            slots = 100,
+            weight = 1000000,
+            groups = ({["gwa"] = 1}),
+            owner = false,
+            coords = vec3(936.530518, -1466.695312, 29.249493),
+            distance = 1.5,
+            debug = false
+        },
         verteiler = {
             id = 'verteiler_lager_01',
             type = 'stash',

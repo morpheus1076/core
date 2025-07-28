@@ -1,20 +1,6 @@
 
+lib.locale()
 local Mor = require("client.cl_lib")
-
-RegisterCommand("groupperms", function()
-    local player = Ox.GetPlayer(PlayerId())
-    Wait(50)
-    local permissions = Ox.GetGroupPermissions('staat')
-    print(json.encode(permissions))
-    print(player)
-    local plkey = player.get('fullname')
-    print(plkey)
-    if not plkey then
-        local wert1 = 'Cyrus Bradshaw'
-        TriggerServerEvent('testing:Werte', wert1)
-        --player.set('fullname', 'Cyrus Bradshaw', false)
-    end
-end, false)
 
 RegisterCommand("bucket", function()
     local player = Ox.GetPlayer(PlayerId())
@@ -38,7 +24,8 @@ RegisterNetEvent('cl_core:NpcSettings', function(entity)
     SetEntityAsMissionEntity(entity, true, true)
 end)
 
-lib.onCache('vehicle', function(vehicle, oldValue)
+-- Abfrage aller vier Raäder, nach ihrem Zustand.
+--[[lib.onCache('vehicle', function(vehicle, oldValue)
     if vehicle ~= false then
         CreateThread(function()
             while true do
@@ -60,8 +47,127 @@ lib.onCache('vehicle', function(vehicle, oldValue)
             end
         end)
     end
-end)
+end)]]
 
 --[[lib.onCache('weapon', function(weaponhash)
     print(json.encode(weaponhash))
 end)]]
+
+
+--Teleport mit Fahrzeuh am Casino in die Casino-Garage
+local function TeleportVehicleWithOccupants(vehicle, coords, heading)
+    -- Sicherstellen, dass das Fahrzeug existiert
+    if not DoesEntityExist(vehicle) then
+        print("Fahrzeug existiert nicht!")
+        return false
+    end
+
+    -- Fahrzeug und Insassen einfrieren (optional, für weniger Probleme)
+    FreezeEntityPosition(vehicle, true)
+
+    -- Alle Insassen des Fahrzeugs holen
+    local occupants = {}
+    for i = -1, GetVehicleMaxNumberOfPassengers(vehicle) - 1 do
+        local ped = GetPedInVehicleSeat(vehicle, i)
+        if DoesEntityExist(ped) then
+            table.insert(occupants, ped)
+            FreezeEntityPosition(ped, true) -- Optional: Insassen einfrieren
+        end
+    end
+
+    -- Fahrzeug teleportieren
+    SetEntityCoords(vehicle, coords.x, coords.y, coords.z, false, false, false, false)
+    SetEntityHeading(vehicle, heading or coords.w or 0.0)
+
+    -- Kurze Verzögerung (optional)
+    Citizen.Wait(100)
+
+    -- Fahrzeug und Insassen wieder auftauen
+    FreezeEntityPosition(vehicle, false)
+    for _, ped in ipairs(occupants) do
+        if DoesEntityExist(ped) then
+            FreezeEntityPosition(ped, false)
+        end
+    end
+
+    return true
+end
+
+local pointenter = lib.points.new({
+    coords = vec3(1000.201, -55.348, 74.960),
+    distance = 5,
+})
+
+local pointleave = lib.points.new({
+    coords = vec3(2650.362, -339.766, -64.723),
+    distance = 5,
+})
+
+lib.locale()
+
+function pointenter:nearby()
+    local pedInVeh = IsPedInAnyVehicle(PlayerPedId(), false)
+    local destination = vec4(2650.788, -339.778, -65.135, 49.988)
+
+    if pedInVeh then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        lib.showTextUI(locale('Press [E] enter garage'), {
+            position = 'left-center',
+            icon = 'warehouse',
+            iconColor = 'blue',
+        })
+
+        if self.currentDistance < 5 and IsControlJustReleased(0, 38) then
+            if vehicle ~= 0 then
+                DoScreenFadeOut(2000)
+                while not IsScreenFadedOut() do
+                    Wait(0)
+                end
+                TeleportVehicleWithOccupants(vehicle, destination)
+                DoScreenFadeIn(2000)
+                while not IsScreenFadedIn() do
+                    Wait(0)
+                end
+            else
+                print("Spieler ist in keinem Fahrzeug!")
+            end
+        end
+    end
+end
+
+function pointenter:onExit()
+    lib.hideTextUI()
+end
+
+function pointleave:nearby()
+    local pedInVeh = IsPedInAnyVehicle(PlayerPedId(), false)
+    local destination = vec4(996.059, -57.811, 74.348, 115.994)
+
+    if pedInVeh then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        lib.showTextUI(locale('Press [E] leave garage'), {
+            position = 'left-center',
+            icon = 'warehouse',
+        })
+
+        if self.currentDistance < 5 and IsControlJustReleased(0, 38) then
+            if vehicle ~= 0 then
+                DoScreenFadeOut(2000)
+                while not IsScreenFadedOut() do
+                    Wait(0)
+                end
+                TeleportVehicleWithOccupants(vehicle, destination)
+                DoScreenFadeIn(2000)
+                while not IsScreenFadedIn() do
+                    Wait(0)
+                end
+            else
+                print("Spieler ist in keinem Fahrzeug!")
+            end
+        end
+    end
+end
+
+function pointleave:onExit()
+    lib.hideTextUI()
+end
