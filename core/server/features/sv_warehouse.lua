@@ -20,7 +20,7 @@ AddEventHandler('WHInventory', function()
         local cfgPlz = WHConfig.Lager[i]
         if cfgPlz then
             local charId = player.charId
-            exports.ox_inventory:RegisterStash(cfgPlz.id, cfgPlz.label, cfgPlz.slots, cfgPlz.maxWeight, charId, false, cfgPlz.coords ) --
+            exports.ox_inventory:RegisterStash(cfgPlz.id, cfgPlz.label, cfgPlz.slots, cfgPlz.maxWeight, false, cfgPlz.coords ) --
         end
     end
 end)
