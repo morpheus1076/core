@@ -50,6 +50,62 @@ local function WetterAuswahl(wetter)
     SetRandomWeather()
 end
 
+local function VehicleGiveGroup(data)
+    local allGroups = lib.callback.await('morlib:GetAllGroups')
+    grpList = {}
+    for i=1, #allGroups do
+        Wait(300)
+        local group = lib.callback.await('morlib:GetLabels', source, allGroups[i].name, allGroups[i].grade)
+        if group == nil or (type(group) == "table" and next(group) == nil) then return end
+        if allGroups[i].name ~= 'arbeitslos' then
+            table.insert(grpList, {
+                title = group.grouplabel,
+                icon = 'user-group',
+                onSelect = function()
+                    lib.callback.await('VehicleToGroup', source, data, allGroups[i].name)
+                end
+            })
+        end
+    end
+
+    lib.registerContext({
+        id = 'groupvehicle',
+        title = 'Fahrzeug umschreiben',
+        menu = 'uebersicht_menu',
+        options = grpList,
+    })
+
+    lib.showContext('groupvehicle')
+end
+
+local function VehicleManagement(data)
+    lib.print.info(data)
+    lib.registerContext({
+        id = 'fahrzeugverwaltung',
+        title = 'Fahrzeug Verwaltung',
+        menu = 'uebersicht_menu',
+        options = {
+            {
+                title = 'In Gruppe eintragen',
+                description = 'Fahrzeug an Gruppe überschreiben',
+                icon = 'car',
+                onSelect = function()
+                    VehicleGiveGroup(data)
+                end
+            },
+            {
+                title = 'An Person übertragen',
+                description = 'Fahrzeug an Person überschreiben',
+                icon = 'car',
+                onSelect = function()
+
+                end
+            },
+        }
+    })
+    lib.showContext('fahrzeugverwaltung')
+end
+
 local function CreateVehList(data)
     vehList = {}
     local garage
@@ -74,8 +130,10 @@ local function CreateVehList(data)
         table.insert(vehList, {
             title = ''..symbol..' Fahrzeug: '..vehdata.name,
             description = 'Garage: '..garage..'\n  Kennzeichen: '..data[i].plate,
-            readOnly = true,
             image = "nui://core/images/"..data[i].model..".png",
+            onSelect = function()
+                VehicleManagement(data[i])
+            end
         })
     end
     return vehList
@@ -335,7 +393,6 @@ local function Pedtragen(ped)
 end
 
 local function FirmaManagement()
-    print('Menu Firam')
     local aktGroup = lib.callback.await('jobabfrage', source)
     local allGroups = lib.callback.await('morlib:GetAllGroups')
 
@@ -651,34 +708,6 @@ local function MenuSelect()
     })
 
     lib.registerContext({
-        id = 'persdaten_menu',
-        title = 'Persönliche Daten',
-        menu = 'persoenlichesmenu',
-        options = {
-            {
-                title = 'Deine Person',
-                icon = 'user',
-                onSelect = function()
-                    print('persönliche Daten')
-                end,
-                metadata = {
-                    {label = 'Name: ', value = plyData[1].fullName},
-                    {label = 'Character Id: ', value = player.charId},
-                    {label = 'Geboren am: ', value = plyDate},
-                    {label = 'Telefonnummer: ', value = plyData[1].phoneNumber},
-                },
-            },
-            {
-                title = 'Fahrzeuge',
-                icon = 'truck',
-                onSelect = function()
-                    print('Deine Fahrzeuge')
-                end,
-            },
-        }
-    })
-
-    lib.registerContext({
         id = 'tools_menu',
         title = 'Tools Menü',
         menu = 'persoenlichesmenu',
@@ -692,8 +721,8 @@ local function MenuSelect()
                 end,
             },
             {
-                label = 'Fahrzeuge DB prüfen',
-                icon = 'code-compare',
+                label = 'Fahrzeugliste prüfen(DB)',
+                icon = 'database',
                 onSelect = function()
                     TriggerEvent('StartDBVehModels')
                 end
@@ -841,8 +870,8 @@ end
 
 local keybind = lib.addKeybind({
     name = 'Menü',
-    description = 'Drücke y um Dein Menü zu öffnen.',
-    defaultKey = 'z',
+    description = 'Drücke F3 um Dein Menü zu öffnen.',
+    defaultKey = 'F3',
     onPressed = function(self)
         lib.hideContext(true)
         Wait(20)

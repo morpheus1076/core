@@ -1,0 +1,50 @@
+
+
+## features
+0. Lib ausbauen.
+1. Housing. (appartments, motels, häuser, trailer) ?? Business
+2. Robbing. (List of Items, radomizing(chance)).
+3. Police Job.
+4. Medic Job.
+5. Handy Dispatchsystem???
+6. Fahrzeug Ölstand
+7. Falsche Kennzeichen oder verdeckte Kennzeichen.
+
+
+## plan
+
+zu 0.00 Lib Bank einrichten
+0.01. Invoice in Mor-Lib einbauen. Serverside
+0.02. Banküberweisung einbauen. Serverside
+---
+zu 1. Housing
+---
+zu 2. Robbing
+---
+zu 3. Police Job
+3.1. Rechnung stellen. (Strafen Katalog)
+3.2. Strafakten.
+3.2.1. offene Haftbefehle
+3.3. Fahrzeugzulassungen. (mit TÜV)
+3.4. Handschellen anlegen und abnehmen.
+3.5. Person tragen.
+3.6. Person in/aus Fahrzeug setzen/nehmen.
+
+
+--- automatischer Export aller functionen aus Chat GPT nutzen in nucleus Lib ganz unten????
+for fname, func in pairs(Mor) do
+    if type(func) == "function" then
+        exports(fname, function(...)
+            return func(...)
+        end)
+    end
+end
+
+
+## GROUPS -- JOBS ##
+gwa = Gentelmans            ==> Schwarzgeld
+ballas = Ballas             ==> Koks
+vagos = vagos               ==> Weed
+triads = Triaden            ==> Falschgeld
+ttf = The Taco Farmer       ==> Food, Drinks
+lsc = Los Santos Customs    ==> Abschlepphof

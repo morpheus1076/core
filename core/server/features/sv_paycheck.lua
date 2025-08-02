@@ -1,7 +1,7 @@
 
 lib.callback.register('paycheck', function(source)
     local player = Ox.GetPlayer(source)
-    local amount = 0
+    local amount
 
     if not player then return '0' end
 
@@ -12,11 +12,11 @@ lib.callback.register('paycheck', function(source)
     --if group == 'arbeitslos' or nil then group = 'staat' end
     local account = player.getAccount()
     local groupaccount = Ox.GetGroupAccount(group)
-    local amount = MySQL.query.await('SELECT `paycheck` FROM `ox_group_grades` WHERE `group` = ? AND `grade` = ?;',{aktGroup[1].name, aktGroup[1].grade})
+    amount = MySQL.query.await('SELECT `paycheck` FROM `ox_group_grades` WHERE `group` = ? AND `grade` = ?;',{aktGroup[1].name, aktGroup[1].grade})
 
     if amount then
-        local plyName = player.get('fullname')
-        local remove = groupaccount.removeBalance({amount = amount[1].paycheck, message = "Paycheck "..plyName[1].fullName.."", true})
+        local plyName = player.get('playerdata')
+        local remove = groupaccount.removeBalance({amount = amount[1].paycheck, message = "Paycheck "..plyName.fullname.."", true})
         account.addBalance({amount = amount[1].paycheck, message = "Paycheck: "..group.."", true})
         if remove.success == true then
             return amount[1].paycheck
@@ -29,5 +29,4 @@ lib.callback.register('paycheck', function(source)
             amount = compgroup[i].paycheck
         end
     end]]
-
 end)

@@ -29,6 +29,8 @@ Ceeb.props = {
     [`imp_prop_impexp_rack_02a`]  = { { mode = DELETE, pos = {vector3(944.235107, -1458.099243, 29.396357)}}}, -- Fehler beim Warenhaus GWA
     [`ex_prop_crate_closed_sc`]  = { { mode = DELETE, pos = {vec3(944.183777, -1458.094238, 31.182119)}}}, -- Fehler beim Warenhaus GWA
     [`bkr_prop_crate_set_01a`]  = { { mode = DELETE, pos = {vec3(944.272522, -1458.122192, 30.226608)}}}, -- Fehler beim Warenhaus GWA
+    [`v_ilev_ph_gendoor006`]  = { { mode = DELETE, pos = {vec3(-1389.212036, -588.040649, 30.491318)}}}, -- BahamaMamas rechte Einganhstür.
+    [`v_ilev_ph_gendoor006`]  = { { mode = DELETE, pos = {vec3(-1387.025513, -586.613831, 30.495628)}}}, -- BahamaMamas linke Einganhstür.
 
     -- Gas pumps (Avoid vehicles to desync and break gas pumps, can be destroyed by pistols)
     [`prop_gas_pump_old2`]       = { { mode = FREEZE } },

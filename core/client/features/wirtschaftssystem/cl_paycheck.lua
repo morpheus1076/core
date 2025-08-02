@@ -1,6 +1,7 @@
 
 local Mor = require("client.cl_lib")
-local minuten = 30*60000
+local cfg = require("shared.cfg_core")
+local minuten = cfg.PaycheckTime*60000
 local cfg = require("shared.cfg_core")
 
 CreateThread(function()
@@ -12,7 +13,7 @@ CreateThread(function()
                 local msg = {
                     title = '~w~Gehaltszahlung',
                     subtitle = "~b~Bankeinzahlung.",
-                    text = '~w~Dein Gehalt ~y~$'..paycheckamount.. '~w~ wurde ~g~überwiesen.',
+                    text = '~w~Dein Gehalt ~y~$'..paycheckamount..'~w~ wurde ~g~überwiesen.',
                     duration = 0.4,
                     pict = 'CHAR_BANK_FLEECA',
                 }

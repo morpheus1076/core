@@ -42,10 +42,12 @@ return {
     PointsystemUse = true,           -- Use Craft-, Farm-, Business-, Crime- --- Pointsystem
     Vehshop = true,                  -- Fahrzeuggeschäft nutzen
     PaycheckUse = true,              -- Paychecksystem nutzen
+    PaycheckTime = 5,               -- Minuten bis zur nächsten Auszahlung.
     FreeGargeUse = true,             -- Eigenes Garagensystem nutzen
     HousingUse = true,               -- Eigenes Housing System nutzen
     HospitalUse = true,              -- Hospital NPCs für Heilung gegen Geld.
     AuftraggeberUse = true,          -- Auftraggeber für Framjobs etc. nutzen?
+    ElevatorsUse = true,             -- Fahrstuhlsystem nutzen?
 
     commandlist = {
         {command = 'commands', nutzen = 'Liste aller eigenen Commands.'},

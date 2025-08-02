@@ -38,12 +38,12 @@ RegisterNetEvent('VehAusparken', function(source, plate, coords, heading)
     end
 end)
 
-lib.callback.register('GetGarageVehicle', function(source, garage)
-    local getVehicles = {}
+lib.callback.register('GetGarageVehicle', function(source, garage, group)
+    local getVehicles
     local player = Ox.GetPlayer(source)
     local owner = player.charId
     if owner then
-        getVehicles = MySQL.query.await('SELECT * FROM `vehicles` WHERE `garage` = ? AND `owner` = ? ', {garage, owner})
+        getVehicles = MySQL.query.await('SELECT * FROM `vehicles` WHERE `garage` = ? AND (`owner` = ? OR `group`=?) ', {garage, owner, group})
     end
     if getVehicles then
         return getVehicles

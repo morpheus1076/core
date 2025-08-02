@@ -87,7 +87,11 @@ end
 local function AusparkMenu()
     if cfg_garage.Aktiv then
         local Options = {}
-        local getVehicles = lib.callback.await('GetGarageVehicle', source, aktGarage)
+        local player = Ox.GetPlayer(PlayerId())
+        local plyData = player.get('playerdata')
+        local group = plyData.group
+        lib.print.info(plyData)
+        local getVehicles = lib.callback.await('GetGarageVehicle', source, aktGarage, group)
         if getVehicles then
             for i=1, #getVehicles do
                 local testData = json.decode(getVehicles[i].data)
@@ -336,7 +340,7 @@ local function Vehopen()
     local player = PlayerPedId()
     local pcoords = GetEntityCoords(player)
     local veh = nil
-    local invkey
+    local invkey, invkey2
 
     StartWorkaroundTask()
 
@@ -345,7 +349,8 @@ local function Vehopen()
         local vehpropsi = lib.getVehicleProperties(veh)
 		Wait(200)
         if vehpropsi then
-            invkey = exports.ox_inventory:GetItemCount('keys', {'Master '..vehpropsi.plate}) --and exports.ox_inventory:GetItemCount('keys', {'Kopie: '..vehpropsi.plate})
+            invkey = exports.ox_inventory:GetItemCount('keys', {'Master '..vehpropsi.plate})
+            invkey2 = exports.ox_inventory:GetItemCount('keys', {'Kopie '..vehpropsi.plate})--and exports.ox_inventory:GetItemCount('keys', {'Kopie: '..vehpropsi.plate})
         end
     else
         veh = GetClosestVehicle(pcoords.x, pcoords.y, pcoords.z, 8.0, 0, 70)
@@ -353,12 +358,13 @@ local function Vehopen()
 		Wait(200)
         if vehpropsi then
             invkey = exports.ox_inventory:GetItemCount('keys', {'Master '..vehpropsi.plate}) --and exports.ox_inventory:GetItemCount('keys', {'Kopie: '..vehpropsi.plate})
+            invkey2 = exports.ox_inventory:GetItemCount('keys', {'Kopie '..vehpropsi.plate})
         end
     end
     if not DoesEntityExist(veh) then
         return
     end
-    if invkey == 1 then
+    if invkey >= 1 or invkey2 >= 1 then
         local vehlock = GetVehicleDoorLockStatus(veh)
         if vehlock == 1 then
 			local vehprops = lib.getVehicleProperties(veh)

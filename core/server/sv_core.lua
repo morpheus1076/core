@@ -49,7 +49,8 @@ AddEventHandler('ox:playerLoaded', function(playerId, userId, charId)
     }
     player.set('playerdata', playerData, true)
     if group == nil then SetGroup(userId) end
-    local message = "Spieler: "..player.username.." ist jetzt in der Stadt aktiv."
+    local plyData = player.get('playerdata')
+    local message = "Spieler: "..plyData.fullname.." ist jetzt in der Stadt aktiv."
     Mor.Log:add('join', message, charId)
 
     CreateThread(function()

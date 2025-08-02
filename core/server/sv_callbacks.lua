@@ -177,6 +177,17 @@ lib.callback.register('GetAllPlayerVehicles', function()
     return plyVehicles
 end)
 
+lib.callback.register('VehicleToGroup', function(source, vehdata, group)
+    local player = Ox.GetPlayer(source)
+    lib.print.info(vehdata)
+    lib.print.info(group)
+    local vehicle = Ox.GetVehicleFromVin(vehdata.vin)
+    lib.print.info(vehicle)
+
+    vehicle.setGroup(group)
+    return true
+end)
+
 -- pointsystem
 lib.callback.register('GiveEPoints', function(source, eptype, amount)
     local player = Ox.GetPlayer(source)

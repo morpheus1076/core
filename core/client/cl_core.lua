@@ -1,5 +1,7 @@
 
-
+if not lib then
+    error('ox_lib ist nicht geladen!')
+end
 
 local Mor = require("client.cl_lib")
 
@@ -249,6 +251,19 @@ local function BigMap()
     return true
 end
 
+local function SetupWeaponDamage()
+    lib.onCache('weapon', function(weaponHash)
+        if weaponHash and weaponHash ~= 0 then
+            -- Bodyshot für alle Waffen (außer Sniper)
+            local modifier = (weaponHash == GetHashKey('WEAPON_SNIPERRIFLE')) and 2.0 or 1.0
+            SetWeaponDamageModifier(weaponHash, modifier)
+            lib.print.info('cl_core:Weaponmodifier: '..modifier)
+        end
+    end)
+    return true
+end
+
+
 AddEventHandler('ox:playerLoaded', function(playerId, isNew)
     local pedSetting = PedGrundsteuerung()
     local timeSetting = ZeitSteuerung()
@@ -258,11 +273,12 @@ AddEventHandler('ox:playerLoaded', function(playerId, isNew)
     local scenSetting = ScenarioSteuerung()
     local audioSetting = AudioSteuerung()
     local bigmapSetting = BigMap()
+    local bodyshotSetting = SetupWeaponDamage()
     local aceabfrage = lib.callback.await('AceCheck')
     isAdmin = aceabfrage
 
     if isAdmin then
-        if pedSetting and timeSetting and weatherSettings and mapSettings and
+        if pedSetting and timeSetting and weatherSettings and mapSettings and bodyshotSetting and
                     npcSetting and scenSetting and audioSetting and bigmapSetting then
             local msg = true
             lib.callback.await('MessageClientStart', source, msg)
@@ -271,6 +287,7 @@ AddEventHandler('ox:playerLoaded', function(playerId, isNew)
         else
             local msg = false
             lib.callback.await('MessageClientStart', source, msg)
+            Mor.Notify('~b~Willkommen in Los Santos')
         end
     end
 end)

@@ -146,14 +146,36 @@ lib.registerRadial({
     id = 'vehicle_menu',
     items = {
         {
-            label = 'Sitzplatz wechseln.',
+            label = 'Sitzplatz wechseln',
             icon = 'seat',
             menu = 'seatchange'
         },
-                {
-            label = 'Fenster.',
+        {
+            label = 'Fenster',
             icon = 'window',
             menu = 'fenster'
+        },
+        {
+            label = 'Alle Türen schließen',
+            icon = 'car-side',
+            onSelect = function()
+                local player = PlayerPedId()
+                if IsPedSittingInAnyVehicle(player) then
+                    local vehicle = GetVehiclePedIsIn(player, false)
+                    SetVehicleDoorsShut(vehicle, false)
+                end
+            end
+        },
+        {
+            label = 'Eigentum verwalten',
+            icon = 'car',
+            onSelect = function()
+                local player = PlayerPedId()
+                if IsPedSittingInAnyVehicle(player) then
+                    local vehicle = GetVehiclePedIsIn(player, false)
+
+                end
+            end
         },
     }
 })
@@ -287,7 +309,7 @@ AddEventHandler('startstop', function()
                         Mor.Notify("~w~Motor ~g~an.")
                     end
                 else
-                    Mor.Notify("~y~Du hast ~r~keine ~y~Schlüssel für dieses Fahrzeug.")
+                    Mor.Notify("~w~Du hast ~r~keinen ~y~Schlüssel ~w~für dieses Fahrzeug.")
                 end
             end
 		end
@@ -357,6 +379,17 @@ lib.onCache('vehicle', function(vehicle, oldValue)
                 Wait(30000)
             end
         end)
+        CreateThread(function()
+            while true do
+                Wait(2000)
+                local vehSpeed = (GetEntitySpeed(vehicle)*3.6)
+                if vehSpeed >= 20 then
+                    SetVehicleDoorsShut(vehicle, false)
+                    Wait(2000)
+                    break
+                end
+            end
+        end)
     end
 end)
 
@@ -369,4 +402,11 @@ RegisterCommand("vehdata", function()
     lib.callback("mileage:get", false, function(km)
         print(("Aktuelle Laufleistung: %.2f km"):format(km))
     end, plate)
+end, false)
+
+RegisterCommand("opendoors", function()
+    local Vehicle = GetVehiclePedIsUsing(PlayerPedId())
+    for i = 0, 5 do
+        SetVehicleDoorOpen(Vehicle, i, false, false) -- will open every door from 0-5
+    end
 end, false)

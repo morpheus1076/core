@@ -41,7 +41,6 @@ local function StartGroupBlips()
     end
 end
 
---AddEventHandler('ox:playerLoaded', function(playerId, isNew)
-    --StartGroupBlips()
---end)
-StartGroupBlips()
+AddEventHandler('ox:playerLoaded', function(playerId, isNew)
+    StartGroupBlips()
+end)

@@ -49,5 +49,9 @@ client_script
     'client/cl_proptweaks.lua',
     'client/menu/*.lua',
     'client/features/*.lua',
+    'client/features/business/*.lua',
+    'client/features/crime/*.lua',
+    'client/features/vehicles/*.lua',
+    'client/features/wirtschaftssystem/*.lua',
     'client/housing/*.lua',
 }

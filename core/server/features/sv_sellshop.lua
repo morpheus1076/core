@@ -4,6 +4,7 @@ lib.callback.register('mor_sellshop:verkauf', function(source, item, itemcount, 
     local player = Ox.GetPlayer(source)
     local account = player.getAccount()
     local groupaccount = Ox.GetGroupAccount(buyer)
+    local plyData = player.get('playerdata')
     local label = shoplabel
     exports.ox_inventory:RemoveItem(player.source, item, itemcount)
     Wait(300)
@@ -11,7 +12,7 @@ lib.callback.register('mor_sellshop:verkauf', function(source, item, itemcount, 
     Wait(300)
     account.addBalance({amount = amount, message = "Verkauf: "..item.."", true})
     Wait(300)
-    groupaccount.removeBalance({amount = amount, message = "Ankauf von "..player.username.."", true})
+    groupaccount.removeBalance({amount = amount, message = "Ankauf von "..plyData.fullname.."", true})
     Wait(300)
 end)
 

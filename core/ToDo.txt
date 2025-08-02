@@ -1,10 +1,14 @@
 
 Planung:
 
-1. Menüs alle neu per lib.context generieren.
+1. Menüs alle neu per lib.context generieren.90% erledigt
 1.00: Map funktionen / Hud funktionen -- Components on Map an aus schlalten.
 
--- Hud-IdCard implementieren(in hud.html und hud.js schon angelegt, mit Bildern.)
+-- Hud-IdCard implementieren(in hud.html und hud.js schon angelegt, mit Bildern.)(client>>Server>>targetClient)
 
 
+
+
+
+Hinweise:
 Youtube für Loadingstream: https://www.youtube.com/watch?v=0Dbo3y2QqP4
