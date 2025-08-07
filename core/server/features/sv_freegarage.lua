@@ -4,6 +4,7 @@ local spawnedVehicles = {}
 RegisterNetEvent('VehEinparken', function(source, coords, garage, vehnet, properties)
     local src = source
     local vehicle = Ox.GetVehicleFromNetId(vehnet)
+    if not vehicle then return end
     vehicle.setProperties(properties, false)
     vehicle.save()
     MySQL.update('UPDATE vehicles SET park_coord = @coords WHERE plate = @plate', {['@coords'] = coords, ['@plate'] = vehicle.plate})

@@ -48,3 +48,22 @@ vagos = vagos               ==> Weed
 triads = Triaden            ==> Falschgeld
 ttf = The Taco Farmer       ==> Food, Drinks
 lsc = Los Santos Customs    ==> Abschlepphof
+
+
+
+Admin Menü
+con_miniconChannels *   --aktivieren
+con_miniconChannels ""  --deaktivieren
+
+
+
+
+
+NEW Vehicle.shops
+
+shops =
+    {
+        - Luxury Dealership (Kaufpreis: 75% vom normelen VK) (mlo vorhanden)
+        - Jobgebundener Verkauf (Kommerzieller Fahrzeugkauf Kaufpreis 50% vom normalen VK)
+        - Lixury Biker Dealership (mlo vorhanden)
+    }

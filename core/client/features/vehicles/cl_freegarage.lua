@@ -1,10 +1,11 @@
 
+local Mor = require("client.cl_lib")
+
 local aktGarage = 'impound'
 local parkBereich = {}
 local garageLoaded = false
 local isRunningWorkaround = false
 local freepBlips = {}
-local Mor = require("client.cl_lib")
 local groupBlipsLoaded = false
 
 local function IsSpawnPointClear(coords, radius)
@@ -90,7 +91,6 @@ local function AusparkMenu()
         local player = Ox.GetPlayer(PlayerId())
         local plyData = player.get('playerdata')
         local group = plyData.group
-        lib.print.info(plyData)
         local getVehicles = lib.callback.await('GetGarageVehicle', source, aktGarage, group)
         if getVehicles then
             for i=1, #getVehicles do
@@ -197,7 +197,7 @@ function CheckSpawnpoints()
         local tdata = {
             title = '~w~Abschleppdienst.',
             subtitle = "~w~On Tour.",
-            text = '~p~Aufräumen beendet.',
+            text = '~p~Abschleppen beendet.',
             duration = 0.4,
             pict = 'CHAR_PROPERTY_TOWING_IMPOUND',
         }
@@ -206,7 +206,7 @@ function CheckSpawnpoints()
         local tdata = {
             title = '~w~Abschleppdienst.',
             subtitle = "~w~On Tour.",
-            text = '~p~Aufräumen beendet.',
+            text = '~p~Abschleppen beendet.',
             duration = 0.4,
             pict = 'CHAR_PROPERTY_TOWING_IMPOUND',
         }
@@ -227,8 +227,6 @@ function GarageBase()
         garageLoaded = true
         local points = cfg_garage.Garagen
         local player = Ox.GetPlayer(PlayerId())
-        --local groups = player.getGroups()
-        --local plygroup = player.getGroup(groups)
         local plyData = player.get('playerdata')
         local plygroup = plyData.group
         Wait(500)
@@ -398,7 +396,7 @@ CreateThread(function()
         local tdata = {
             title = '~w~Abschleppdienst.',
             subtitle = "~w~On Tour.",
-            text = '~w~In ~y~'..despawnTime..' Minuten~w~, wird auf den ~r~Garagen-Parkplätzen ~w~aufgeräumt.',
+            text = '~w~In ~y~'..despawnTime..' Minuten~w~, wird auf den ~r~Garagen-Parkplätzen ~w~abgeschleppt.',
             duration = 0.6,
             pict = 'CHAR_PROPERTY_TOWING_IMPOUND',
         }
@@ -407,7 +405,7 @@ CreateThread(function()
         local tdata = {
             title = '~w~Abschleppdienst.',
             subtitle = "~w~On Tour.",
-            text = '~b~ Aufräumen startet.',
+            text = '~b~Abschleppen startet.',
             duration = 0.3,
             pict = 'CHAR_PROPERTY_TOWING_IMPOUND',
         }
@@ -426,10 +424,6 @@ CreateThread(function()
         Wait(60000)
     end
 end)
-
---GarageBase()
-
---groupBlipsLoaded
 
 AddEventHandler('ox:playerLoaded', function(playerId, isNew)
     Wait(10000)

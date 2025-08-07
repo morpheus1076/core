@@ -47,7 +47,7 @@ return {
 			{ ped = 'S_F_Y_Shop_LOW', scenario = 'WORLD_HUMAN_CLIPBOARD', loc = vec3(1734.491, 6416.077, 34.037), heading = 149.496},
 			{ ped = 'mp_m_shopkeep_01', scenario = 'WORLD_HUMAN_SMOKE', loc = vec3(1963.041, 3745.995, 32.344), heading = 205.228},
 			{ ped = 'S_F_Y_Shop_MID', scenario = 'WORLD_HUMAN_AA_COFFEE', loc = vec3(544.105, 2666.991, 41.157), heading = 8.550},
-			{ ped = 'mp_m_shopkeep_01', scenario = 'WORLD_HUMAN_STAND_MOBILE', loc = vec3(2677.166, 3286.065, 55.241), heading = 241.922},
+			{ ped = 'mp_m_shopkeep_01', scenario = 'WORLD_HUMAN_STAND_MOBILE', loc = vec3(2677.166, 3286.065, 54.241), heading = 241.922},
 			{ ped = 'S_F_Y_Shop_LOW', scenario = 'WORLD_HUMAN_CLIPBOARD', loc = vec3(2553.693, 386.332, 108.623), heading = 259.845},
 			{ ped = 'mp_m_shopkeep_01', scenario = 'WORLD_HUMAN_AA_COFFEE', loc = vec3(159.9670, 6641.0176, 30.6985), heading = 225.7307},
 			{ ped = 'S_F_Y_Shop_LOW', scenario = 'WORLD_HUMAN_AA_COFFEE', loc = vec3(2005.173, 3784.776, 32.201), heading = 113.284},

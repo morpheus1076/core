@@ -1,8 +1,5 @@
 
 local Mor = require("client.cl_lib")
-local Con = require("shared.cfg_secretselling")
-
-SetThisScriptCanRemoveBlipsCreatedByAnyScript(true)
 
 local createNPC = CfgVehThief.auftraggeber
 local stolenentity = 0
@@ -92,6 +89,7 @@ end
 local function onEnter(self)
     local pedInVeh = false
     local inAusfuehrung = lib.callback.await('vehiclethief:getauftragnehmer', source)
+    Wait(500)
     stolenentity = lib.getClosestVehicle(self.coords, 3, false)
     local hotw = IsVehicleNeedsToBeHotwired(stolenentity)
     if hotw == false then
@@ -115,7 +113,7 @@ local function onEnter(self)
                 end
             end
             if thiefnpc ~= 0 then
-                DeletePed(thiefnpc)
+                DeletePed(thiefnpc.ped)
                 StartAbgabeCooldown()
                 thiefnpc = 0
             end
@@ -147,16 +145,13 @@ end
 
 local function CreateNPCPed()
     if CfgVehThief.aktiv then
-        RequestModel(GetHashKey(createNPC.pedmodel))
-        while not HasModelLoaded(GetHashKey(createNPC.pedmodel)) do
-            Wait(1)
-        end
-        thiefnpc = CreatePed(4, createNPC.pedhash, createNPC.coords.x, createNPC.coords.y, createNPC.coords.z-1, createNPC.heading, true, true)
-        FreezeEntityPosition(thiefnpc, true)
-        SetEntityHeading(thiefnpc, createNPC.heading)
-        SetEntityInvincible(thiefnpc, true)
-        SetBlockingOfNonTemporaryEvents(thiefnpc, true)
-        TaskStartScenarioInPlace(thiefnpc, createNPC.scenario, -1, true)
+        thiefnpc = Mor.NPC:new({
+            model = createNPC.pedmodel,
+            coords = createNPC.coords,
+            heading = createNPC.heading,
+            scenario = createNPC.scenario,
+            targetable = false
+        })
     end
 end
 
@@ -231,7 +226,7 @@ local function Auftragsabgabe()
                         duration = 0.6,
                         pict = 'CHAR_LESTER',
                         }
-                    exports['mor_nucleus']:PostFeed(tdata)
+                    Mor.PostFeed(tdata)
                 else
                     Mor.WarnLog('~r~[Fehler cl_vehiclethief]: ~w~Bei der Auftragsabgabe.')
                 end
@@ -355,6 +350,4 @@ CreateThread(function()
     end
 end)
 
-AddEventHandler('ox:playerLoaded', function(playerId, isNew)
-    CreateNPCPed()
-end)
+CreateNPCPed()

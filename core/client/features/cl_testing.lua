@@ -8,21 +8,7 @@ RegisterCommand("bucket", function()
     Mor.Notify('Aktueller Bucket: '..StateBucket)
 end, false)
 
-RegisterCommand("health50", function()
-    SetEntityHealth(PlayerPedId(), 100)
-end, false)
 
-
-RegisterCommand("test", function()
-    print('Test Command')
-    local cmdList = GetRegisteredCommands()
-    print(cmdList)
-    print(json.encode(cmdList))
-end, false)
-
-RegisterNetEvent('cl_core:NpcSettings', function(entity)
-    SetEntityAsMissionEntity(entity, true, true)
-end)
 
 -- Abfrage aller vier Raäder, nach ihrem Zustand.
 --[[lib.onCache('vehicle', function(vehicle, oldValue)

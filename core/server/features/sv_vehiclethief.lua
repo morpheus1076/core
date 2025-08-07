@@ -1,9 +1,4 @@
 
-------------------------------------------------------------------------
-local Notify = function(msg) exports['mor_core']:Notify(msg) end
-local InfoLog = function(msg) exports['mor_core']:InfoLog(msg) end
-local WarnLog = function(msg) exports['mor_core']:WarnLog(msg) end
-------------------------------------------------------------------------
 local Mor = require("server.sv_lib")
 
 local spawnedthiefVehicle = nil
@@ -42,7 +37,7 @@ lib.callback.register('vehiclethief:SpawnThiefVehicle', function(source)
                     if player ~= nil then
                         local vehnetentity = spawnedthiefVehicle.netId
                         SetVehicleDoorsLocked(spawnedthiefVehicle.entity, 1)
-                        Notify("~g~Auftrag in "..start.gebiet.." , ~w~angenommen: ~y~Prüfe Deine Karte um Dein Ziel zu sehen.")
+                        --Mor.Notify("~g~Auftrag in "..start.gebiet.." , ~w~angenommen: ~y~Prüfe Deine Karte um Dein Ziel zu sehen.")
                         Wait(100)
                         auftragnehmer = player.source
                         local spawncoords = spawnedthiefVehicle.getCoords()
@@ -51,13 +46,13 @@ lib.callback.register('vehiclethief:SpawnThiefVehicle', function(source)
                     end
 
                 else
-                    WarnLog('Player nicht gefunden Thief sv Z53')
+                    --Mor.WarnLog('Player nicht gefunden Thief sv Z53')
                 end
             else
-                Notify("Du hast nicht genügend Bargeld dabei. Falls Du eine Strafe zahlen musst")
+                --Mor.Notify("Du hast nicht genügend Bargeld dabei. Falls Du eine Strafe zahlen musst")
             end
         else
-            Notify("~r~Fehler, ~w~kein aktueller Auftrag vorhanden.")
+            --Mor.Notify("~r~Fehler, ~w~kein aktueller Auftrag vorhanden.")
         end
         return auftragnehmer
     end
@@ -89,7 +84,7 @@ function CheckMoneyStrafe(source)
             return false
         end
     else
-        WarnLog('Fehler: Player nicht gefunden')
+        --Mor.WarnLog('Fehler: Player nicht gefunden')
     end
 end
 
@@ -113,7 +108,7 @@ lib.callback.register('vehiclethief:auftragsabgabe', function(source, belohnung)
             vehicle.despawn(false)
             return 'AbgabeErledigt'
         else
-            Notify('~w~Fahrzeug ~r~nicht ~w~nahe genug am Auftraggeber.')
+            --Mor.Notify('~w~Fahrzeug ~r~nicht ~w~nahe genug am Auftraggeber.')
             return 'AbgabeFehler'
         end
     end
@@ -151,7 +146,7 @@ lib.callback.register('MessageToThief', function(source, phoneNumber)
     exports.npwd:emitMessage({
         senderNumber = 'Auftraggeber',
         targetNumber = phoneNumber,
-        message = 'Bin zurück. Zum Glück ist nix passiert.  \n \nKann Dir das Fahrzeug nun Abnehmen.',
+        message = 'Bin zurück. Zum Glück ist nix passiert.  \n \nKann Dir das Fahrzeug nun abnehmen.',
         embed = {
             type = "location",
             coords = { 474.975, -1310.110, 29.207 },

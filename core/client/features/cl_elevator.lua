@@ -13,7 +13,15 @@ local function Teleport(data)
         for _, j in pairs(v) do
             if args == j.id then
                 local coords = j.coords
+                DoScreenFadeOut(2000)
+                while not IsScreenFadedOut() do
+                    Wait(0)
+                end
                 StartPlayerTeleport(PlayerId(), coords.x, coords.y, coords.z, j.heading, false, true, true)
+                DoScreenFadeIn(2000)
+                while not IsScreenFadedIn() do
+                    Wait(0)
+                end
                 while IsPlayerTeleportActive() do
                     Wait(2000)
                 end
@@ -22,7 +30,7 @@ local function Teleport(data)
     end
 end
 
-local function Devoptions()
+local function Createoptions()
     Options = {}
     for k,v in pairs(elevators) do
         for _, j in pairs(v) do
@@ -37,7 +45,7 @@ end
 local function inside(self)
     local result = IsControlJustPressed(1, 38)
     if result then
-        local Options = Devoptions()
+        local Options = Createoptions()
         lib.registerContext({
             id = 'elevators',
             title = 'Hell`s Elevators',
@@ -51,10 +59,15 @@ end
 local function ExitElevator(self)
     Elevatorname = {}
     Options = {}
+    lib.hideTextUI()
 end
 
 local function Enterelevator(self)
-    Mor.Notify("~e~Drücke ~r~[E] ~w~um den Aufzug zu benutzen")
+    lib.showTextUI('[E] - Fahrstuhl nutzen', {
+        position = "left-center",
+        icon = 'hand',
+    })
+   -- Mor.Notify("~e~Drücke ~r~[E] ~w~um den Aufzug zu benutzen")
     Elevatorname = self.Elevatorname
 end
 

@@ -7,10 +7,11 @@ end)
 
 lib.callback.register('VorschauVehicle', function(source, model, coords, heading)
     local player = Ox.GetPlayer(source)
-    local garage = 'pillbox'
+    local garage = 'legionsquare'
     local spawndata = {model = model, owner = player.charId, stored = garage}
     local veh = Ox.CreateVehicle(spawndata, coords, heading)
     Wait(1000)
+    SetVehicleColours(veh.entity,111,111)
     FreezeEntityPosition(veh.entity, true)
     SetVehicleDirtLevel(veh.entity, 0.0)
     TaskWarpPedIntoVehicle(player.ped, veh.entity, -1)
@@ -35,9 +36,9 @@ lib.callback.register('PrivatBarKauf', function(source, price, kvehicle, vehicle
     end
     local plate = vehicle.plate or props.plate
     if plate == nil then print('sv_vehshop :: Plate ist nil???') end
+    local vehData = Ox.GetVehicleData(vehicle.model)
     exports.ox_inventory:RemoveItem(player.source, 'money', price)
-    exports.ox_inventory:AddItem(player.source, 'keys', 1, {Kennzeichen = vehicle.plate, type = 'Master '..vehicle.plate..'', description = 'VIN: '..vehicle.vin..''})
-    MySQL.update('UPDATE vehicles SET props = @props WHERE plate = @plate', {['@props'] = json.encode(props), ['@plate'] = plate })
+    exports.ox_inventory:AddItem(player.source, 'keys', 1, {label = vehData.name, Kennzeichen = vehicle.plate, type = 'Master '..vehicle.plate..'', description = 'VIN: '..vehicle.vin..'', name = "Model: "..vehicle.model})
     return 'verkauft'
 end)
 
@@ -64,7 +65,8 @@ lib.callback.register('PrivatBank', function(source, price, kvehicle, vehiclepro
     if accountbalance >= price then
         account.removeBalance({amount = price, message = "Fahrzeugkauf :: VIN: "..vehicle.vin.."", true})
         sellaccount.addBalance({amount = price, message = "Fahrzeugkauf :: VIN: "..vehicle.vin.."", true})
-        exports.ox_inventory:AddItem(player.source, 'keys', 1, {Kennzeichen = vehicle.plate, type = 'Master '..vehicle.plate..'', description = 'VIN: '..vehicle.vin..''})
+        local vehData = Ox.GetVehicleData(vehicle.model)
+        exports.ox_inventory:AddItem(player.source, 'keys', 1, {label = vehData.name, Kennzeichen = vehicle.plate, type = 'Master '..vehicle.plate..'', description = 'VIN: '..vehicle.vin..'', name = "Model: "..vehicle.model})
         MySQL.update('UPDATE vehicles SET props = @props WHERE plate = @plate', {['@props'] = json.encode(props), ['@plate'] = plate })
         return 'verkauft'
     else
@@ -93,8 +95,9 @@ lib.callback.register('JobBar', function(source, price, kvehicle, vehicleprops)
     end
     local plate = vehicle.plate or props.plate
     if plate == nil then print('sv_vehshop :: Plate ist nil???') end
+    local vehData = Ox.GetVehicleData(vehicle.model)
     exports.ox_inventory:RemoveItem(player.source, 'money', price)
-    exports.ox_inventory:AddItem(player.source, 'keys', 1, {Kennzeichen = vehicle.plate, type = 'Master '..vehicle.plate..'', description = 'VIN: '..vehicle.vin..'', name = "Model: "..vehicle.model})
+    exports.ox_inventory:AddItem(player.source, 'keys', 1, {label = vehData.name, Kennzeichen = vehicle.plate, type = 'Master '..vehicle.plate..'', description = 'VIN: '..vehicle.vin..'', name = "Model: "..vehicle.model})
     Wait(50)
     MySQL.update('UPDATE vehicles SET props = @props WHERE plate = @plate', {['@props'] = json.encode(props), ['@plate'] = plate })
     return 'verkauft'
@@ -123,9 +126,10 @@ lib.callback.register('JobBank', function(source, price, kvehicle, vehicleprops)
     local plate = vehicle.plate or props.plate
     if plate == nil then print('sv_vehshop :: Plate ist nil???') end
     if groupbalance >= price then
+        local vehData = Ox.GetVehicleData(vehicle.model)
         groupaccount.removeBalance({amount = price, message = "Fahrzeugkauf :: VIN: "..vehicle.vin.."", true})
         sellaccount.addBalance({amount = price, message = "Fahrzeugkauf :: VIN: "..vehicle.vin.."", true})
-        exports.ox_inventory:AddItem(player.source, 'keys', 1, {Kennzeichen = vehicle.plate, type = 'Master '..vehicle.plate..'', description = 'VIN: '..vehicle.vin..''})
+        exports.ox_inventory:AddItem(player.source, 'keys', 1, {label = vehData.name, Kennzeichen = vehicle.plate, type = 'Master '..vehicle.plate..'', description = 'VIN: '..vehicle.vin..'', name = "Model: "..vehicle.model})
         Wait(50)
         MySQL.update('UPDATE vehicles SET props = @props WHERE plate = @plate', {['@props'] = json.encode(props), ['@plate'] = plate })
         return 'verkauft'

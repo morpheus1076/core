@@ -410,3 +410,110 @@ RegisterCommand("opendoors", function()
         SetVehicleDoorOpen(Vehicle, i, false, false) -- will open every door from 0-5
     end
 end, false)
+
+local vehicleData = {}
+lib.onCache('vehicle', function(vehicle, oldfalue)
+    if not vehicle then return end
+    vehicleData[vehicle] = vehicleData[vehicle] or {}
+    vehicleData[vehicle].properties = lib.getVehicleProperties(vehicle)
+    vehicleData[vehicle].mods = {
+        ["0"]= {
+            name = locale('spoiler'),
+            is = GetVehicleMod(vehicle, 0),
+            max = GetNumVehicleMods(vehicle, 0),
+            label = GetModTextLabel(vehicle, 0 , is)
+        },
+        ["1"]= {
+            name = locale('bumper Front'),
+            is = GetVehicleMod(vehicle, 1),
+            max = GetNumVehicleMods(vehicle, 1),
+            label = GetModTextLabel(vehicle, 1 , is)
+        },
+        ["2"]= {
+            name = locale('bumper Rear'),
+            is = GetVehicleMod(vehicle, 2),
+            max = GetNumVehicleMods(vehicle, 2),
+            label = GetModTextLabel(vehicle, 2 , is)
+        },
+        ["3"]= {
+            name = locale('skirt'),
+            is = GetVehicleMod(vehicle, 3),
+            max = GetNumVehicleMods(vehicle, 3),
+            label = GetModTextLabel(vehicle, 3 , is)
+        },
+        ["4"]= {
+            name = locale('exhaust'),
+            is = GetVehicleMod(vehicle, 4),
+            max = GetNumVehicleMods(vehicle, 4),
+            label = GetModTextLabel(vehicle, 4 , is)
+        },
+        ["5"]= {
+            name = locale('chassis'),
+            is = GetVehicleMod(vehicle, 5),
+            max = GetNumVehicleMods(vehicle, 5),
+            label = GetModTextLabel(vehicle, 5 , is)
+        },
+        ["6"]= {
+            name = locale('grill'),
+            is = GetVehicleMod(vehicle, 6),
+            max = GetNumVehicleMods(vehicle, 6),
+            label = GetModTextLabel(vehicle, 6 , is)
+        },
+        ["7"]= {
+            name = locale('bonnet'),
+            is = GetVehicleMod(vehicle, 7),
+            max = GetNumVehicleMods(vehicle, 7),
+            label = GetModTextLabel(vehicle, 7, is)
+        },
+        ["8"]= {
+            name = locale('wingL'),
+            is = GetVehicleMod(vehicle, 8),
+            max = GetNumVehicleMods(vehicle, 8),
+            label = GetModTextLabel(vehicle, 8, is)
+        },
+        ["9"]= {
+            name = locale('wingR'),
+            is = GetVehicleMod(vehicle, 9),
+            max = GetNumVehicleMods(vehicle, 9),
+            label = GetModTextLabel(vehicle, 9, is)
+        },
+        ["10"]= {
+            name = locale('roof'),
+            is = GetVehicleMod(vehicle, 10),
+            max = GetNumVehicleMods(vehicle, 10),
+            label = GetModTextLabel(vehicle, 10, is)
+        },
+        ["11"]= {
+            name = locale('engine'),
+            is = GetVehicleMod(vehicle, 11),
+            max = GetNumVehicleMods(vehicle, 11),
+            label = GetModTextLabel(vehicle, 11, is)
+        },
+        ["12"]= {
+            name = locale('brakes'),
+            is = GetVehicleMod(vehicle, 12),
+            max = GetNumVehicleMods(vehicle, 12),
+            label = GetModTextLabel(vehicle, 12, is)
+        },
+        ["13"]= {
+            name = locale('gearbox'),
+            is = GetVehicleMod(vehicle, 13),
+            max = GetNumVehicleMods(vehicle, 13),
+            label = GetModTextLabel(vehicle, 13, is)
+        },
+        ["14"]= {
+            name = locale('horn'),
+            is = GetVehicleMod(vehicle, 14),
+            max = GetNumVehicleMods(vehicle, 14),
+            label = GetModTextLabel(vehicle, 14, is)
+        },
+        ["15"]= {
+            name = locale('suspension'),
+            is = GetVehicleMod(vehicle, 15),
+            max = GetNumVehicleMods(vehicle, 15),
+            label = GetModTextLabel(vehicle, 15, is)
+        },
+    }
+    local vehdata = {mods = vehicleData[vehicle].mods, properties = vehicleData[vehicle].properties, entity = vehicle }
+    local serverCall = lib.callback.await("setVehicleData", source, vehdata)
+end)

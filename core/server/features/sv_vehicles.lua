@@ -63,3 +63,21 @@ end)
 lib.callback.register("mileage:get", function(source, plate)
     return vehicleMileage[plate] or 0
 end)
+
+lib.callback.register("setVehicleData", function(source, data)
+    local vehi = data.properties
+    if vehi.plate then
+        local vin = MySQL.query.await("SELECT `vin` FROM `vehicles` WHERE `plate`= ?",{vehi.plate})
+        Wait(500)
+        if vin then
+            local vehicle = Ox.GetVehicleFromVin(vin)
+            if not vehicle then return end
+            local vehData = {
+                props = data.properties,
+                mods = data.mods,
+                vehicle = vehicle
+            }
+            vehicle.set('vehicledata', vehData)
+        end
+    end
+end)

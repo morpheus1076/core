@@ -20,7 +20,8 @@ files
     'html/sounds/*.*',
     'shared/*.lua',
     'images/*.*',
-    'locales/*.json'
+    'locales/*.json',
+    'json/*.json',
 }
 
 shared_script
@@ -36,6 +37,7 @@ server_script
     'server/sv_lib.lua',
     'server/sv_core.lua',
     'server/sv_hud.lua',
+    'server/sv_clothes.lua',
     'server/menu/*.lua',
     'server/features/*.lua',
     'server/housing/*.lua',
@@ -47,6 +49,7 @@ client_script
     'client/cl_core.lua',
     'client/cl_hud.lua',
     'client/cl_proptweaks.lua',
+    'client/cl_clothes.lua',
     'client/menu/*.lua',
     'client/features/*.lua',
     'client/features/business/*.lua',

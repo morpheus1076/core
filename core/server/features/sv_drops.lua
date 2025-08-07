@@ -23,7 +23,7 @@ RegisterServerEvent("drop:collected")
 AddEventHandler("drop:collected", function()
     local src = source
     local amount = math.random(3100,5200)
-    Mor.Notify('eingesammelt')
+    --Mor.Notify('eingesammelt')
     exports.ox_inventory:AddItem(src, 'black_money', amount)
     TriggerClientEvent("drop:remove", -1)
 end)
@@ -33,7 +33,7 @@ AddEventHandler("drop:destroytimer", function()
     lib.timer((10*60000),
     function()
         TriggerClientEvent("drop:removeexp", -1)
-        Mor.Notify('Frachtkiste wurde ~r~zerstört.')
+        --Mor.Notify('Frachtkiste wurde ~r~zerstört.')
     end, true)
 end)
 
