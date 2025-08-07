@@ -5,6 +5,32 @@ local mods = {}
 local VehicleData = {}
 lib.locale()
 
+local function SaveTuning(vehicle)
+    Mor.Notify('Tuning wurde ~g~gespeichert~w~.')
+    local properties = lib.getVehicleProperties(vehicle)
+    Wait(100)
+    TriggerServerEvent('tuning:SaveVehicleData', source, VehToNet(vehicle), properties)
+end
+
+local function Hextorgb(hex)
+    -- Entferne das führende `#`, falls vorhanden
+    hex = hex
+    hex = hex:gsub("#", "")
+
+    -- Überprüfen, ob die Länge korrekt ist (6 Zeichen)
+    if #hex ~= 6 then
+        print("Ungültiger Hex-Farbcode!")
+        return nil
+    end
+
+    -- Wandle die Hex-Werte in RGB-Werte um
+    local r = tonumber(hex:sub(1, 2), 16)
+    local g = tonumber(hex:sub(3, 4), 16)
+    local b = tonumber(hex:sub(5, 6), 16)
+
+    return r, g, b
+end
+
 function OpenRestlichesMenu()
 
 end
@@ -12,6 +38,7 @@ end
 function OpenRaederMenu()
 
 end
+
 -- Lackierung Submenü
 function OpenLackierungMenu()
     lib.registerMenu({
@@ -23,7 +50,7 @@ function OpenLackierungMenu()
             {label = 'Sekundärfarbe', description = 'Sekundäre Fahrzeugfarbe ändern'},
             {label = 'Perlfarbe', description = 'Perleffekt-Farbe ändern'},
             {label = 'Verchromte Teile', description = 'Verchromte Elemente anpassen'},
-            {label = 'Aufkleber & Design', description = 'Custom Designs und Aufkleber'},
+            {label = 'Folierung', description = 'Custom Designs und Aufkleber'},
             {label = 'Zurück', description = 'Zum Hauptmenü zurück'}
         }
     }, function(selected, scrollIndex, args)
@@ -40,23 +67,81 @@ function OpenLackierungMenu()
     lib.showMenu('tuning_lackierung_menu')
 end
 
--- Karosserie Submenü
 function OpenKarosserieMenu()
+    local frontBValues, rearBValues, sideBValues = {}, {}, {}
+    local spoilerValues, HaubeValues, roofValues = {}, {}, {}
+    local vehicle = GetVehiclePedIsIn(cache.ped, false)
+    local data = GetVehicleData(vehicle)
+    local testdata = data.mods
+    local frontBData = testdata["1"]
+    local rearBData = testdata["2"]
+    local sideData = testdata["3"]
+    local spoilerData = testdata["0"]
+    local roofData = testdata["10"]
+    if frontBData.max ~= 0 then
+        for i = 1, frontBData.max do
+            table.insert(frontBValues, {label = 'Stufe '..i..'', description = 'Aktuelle Stufe: '..(frontBData.is +2), args = i-2} )
+        end
+    else
+        table.insert(frontBValues, {label = 'Kein Tuning möglich', description = 'Aktuelle Stufe: '..(frontBData.is +2), args = frontBData.is} )
+    end
+    if rearBData.max ~= 0 then
+        for i = 1, rearBData.max do
+            table.insert(rearBValues, {label = 'Stufe '..i..'', description = 'Aktuelle Stufe: '..(rearBData.is +2), args = i-2} )
+        end
+    else
+        table.insert(rearBValues, {label = 'Kein Tuning möglich', description = 'Aktuelle Stufe: '..(rearBData.is +2), args = rearBData.is} )
+    end
+    if sideData.max ~= 0 then
+        for i = 1, sideData.max do
+            table.insert(sideBValues, {label = 'Stufe '..i..'', description = 'Aktuelle Stufe: '..(sideData.is +2), args = i-2} )
+        end
+    else
+        table.insert(sideBValues, {label = 'Kein Tuning möglich', description = 'Aktuelle Stufe: '..(sideData.is +2), args = sideData.is} )
+    end
+    if spoilerData.max ~= 0 then
+        for i = 1, spoilerData.max do
+            table.insert(spoilerValues, {label = 'Stufe '..i..'', description = 'Aktuelle Stufe: '..(spoilerData.is +2), args = i-2} )
+        end
+    else
+        table.insert(spoilerValues, {label = 'Kein Tuning möglich', description = 'Aktuelle Stufe: '..(spoilerData.is +2), args = spoilerData.is} )
+    end
+    local frontBOptions = {label = 'Frontschürze', values = frontBValues, args = {mod = "1"}}
+    local rearBOptions = {label = 'Heckschürze', values = rearBValues, args = {mod = "2"}}
+    local sideBOptions = {label = 'Seitenschweller', values = sideBValues, args = {mod = "3"}}
+    local spoilerOptions = {label = 'Spoiler', values = spoilerValues, args = {mod = "0"}}
+
     lib.registerMenu({
         id = 'tuning_karosserie_menu',
         title = 'Karosserie',
         position = 'top-right',
+        onSideScroll = function(selected, scrollIndex, args)
+            lib.print.info("Scroll: ", selected, scrollIndex, args)
+            local setIndex = tonumber(scrollIndex - 2)
+            local modIndex = tonumber(args.mod)
+            SetVehicleMod(vehicle, modIndex, setIndex, false)
+            end,
         options = {
-            {label = 'Frontschürze', description = 'Frontschürzen anpassen'},
-            {label = 'Heckschürze', description = 'Heckschürzen anpassen'},
-            {label = 'Seitenschweller', description = 'Seitenschweller anpassen'},
-            {label = 'Spoiler', description = 'Spoiler anpassen'},
+            frontBOptions,
+            rearBOptions,
+            sideBOptions,
+            spoilerOptions,
             {label = 'Motorhaube', description = 'Motorhauben anpassen'},
             {label = 'Dach', description = 'Dachoptionen anpassen'},
             {label = 'Zurück', description = 'Zum Hauptmenü zurück'}
         }
     }, function(selected, scrollIndex, args)
         -- Implementierung der Karosserie-Mods
+        if selected >= 1 or selected <= 3 and scrollIndex then
+            local setIndex = tonumber(scrollIndex - 2)
+            local modIndex = tonumber(args.mod)
+            SetVehicleMod(vehicle, modIndex, setIndex, false)
+            Wait(500) --entfernen oder reduzieren???
+            local checkMod = GetVehicleMod(vehicle, modIndex) --entfernen
+            lib.print.info(checkMod) --entfernen
+            SaveTuning(vehicle)
+            OpenKarosserieMenu()
+        end
         if selected == 7 then
             OpenTuningMenu()
         end
@@ -105,6 +190,12 @@ function OpenLeistungMenu()
         id = 'tuning_leistung_menu',
         title = 'Leistung',
         position = 'top-right',
+        onSideScroll = function(selected, scrollIndex, args)
+            lib.print.info("Scroll: ", selected, scrollIndex, args)
+            local setIndex = tonumber(scrollIndex - 2)
+            local modIndex = tonumber(args.mod)
+            SetVehicleMod(vehicle, modIndex, setIndex, false)
+            end,
         options = {
             {label = 'Motor', description = 'Motorleistung etc. Menü'},
             bremsenOptions,
@@ -147,7 +238,8 @@ function OpenMotorMenu()
     local engineBay1Data = testdata["39"]
     local engineBay2Data = testdata["40"]
     local engineBay3Data = testdata["41"]
-
+    --lib.print.info(motorData)
+    --lib.print.info(turboData)
     if motorData.max ~= 0 then
         for i = 1, motorData.max do
             table.insert(motorValues, {label = 'Stufe '..i..'', description = 'Aktuelle Stufe: '..(motorData.is +2), args = i-2} )
@@ -196,7 +288,12 @@ function OpenMotorMenu()
         id = 'tuning_motor_menu',
         title = 'Motor Tuning',
         position = 'top-right',
-        onSideScroll = function(selected, scrollIndex, args) lib.print.info("Scroll: ", selected, scrollIndex, args) end,
+        onSideScroll = function(selected, scrollIndex, args)
+            lib.print.info("Scroll: ", selected, scrollIndex, args)
+            local setIndex = tonumber(scrollIndex - 2)
+            local modIndex = tonumber(args.mod)
+            SetVehicleMod(vehicle, modIndex, setIndex, false)
+            end,
         options = {
             motorOptions,
             turboOptions,
@@ -227,15 +324,6 @@ function OpenMotorMenu()
     lib.showMenu('tuning_motor_menu')
 end
 
-
-function SaveTuning(vehicle)
-    Mor.Notify('Tuning wurde ~g~gespeichert~w~.')
-    local properties = lib.getVehicleProperties(vehicle)
-    Wait(100)
-    TriggerServerEvent('tuning:SaveVehicleData', source, VehToNet(vehicle), properties)
-end
-
-
 function OpenTuningMenu()
     -- Prüfen ob Spieler in einem Fahrzeug sitzt
     local vehicle = GetVehiclePedIsIn(cache.ped, false)
@@ -260,7 +348,7 @@ function OpenTuningMenu()
     }, function(selected, scrollIndex, args)
         -- Hier kommen die Submenüs
         if selected == 1 then
-            OpenLackierungMenu()
+            VehColor()
         elseif selected == 2 then
             OpenKarosserieMenu()
         elseif selected == 3 then
@@ -275,63 +363,6 @@ function OpenTuningMenu()
     end)
 
     lib.showMenu('tuning_main_menu')
-end
-
-function GetVehicleMods(vehicle)
-    veh = {
-        entity = vehicle,
-        isSpoiler = GetVehicleMod(vehicle, 0),
-        maxSpoiler = GetNumVehicleMods(vehicle, 0),
-        isBumperF = GetVehicleMod(vehicle, 1),
-        maxBumberF = GetNumVehicleMods(vehicle, 1),
-        isBumperR = GetVehicleMod(vehicle, 2),
-        maxBumperR = GetNumVehicleMods(vehicle, 2),
-        isSkirt = GetVehicleMod(vehicle, 3),
-        maxSkirt = GetNumVehicleMods(vehicle, 3),
-        isExhaust = GetVehicleMod(vehicle, 4),
-        maxExhaust = GetNumVehicleMods(vehicle, 4),
-        isChassis = GetVehicleMod(vehicle, 5),
-        maxChassis = GetNumVehicleMods(vehicle, 5),
-        isGrill = GetVehicleMod(vehicle, 6),
-        maxGrill = GetNumVehicleMods(vehicle, 6),
-        isBonnet = GetVehicleMod(vehicle, 7),
-        maxBonnet = GetNumVehicleMods(vehicle, 7),
-        isWingL = GetVehicleMod(vehicle, 8),
-        maxWingL = GetNumVehicleMods(vehicle, 8),
-        isWingR = GetVehicleMod(vehicle, 9),
-        maxWingR = GetNumVehicleMods(vehicle, 9),
-        isRoof = GetVehicleMod(vehicle, 10),
-        maxRoof = GetNumVehicleMods(vehicle, 10),
-        isEngine = GetVehicleMod(vehicle, 11),
-        maxEngine = GetNumVehicleMods(vehicle, 11),
-        ---isBrakes = ,
-        --maxBrakes = ,
-        --isGearbox = ,
-        --maxGearbox = ,
-       -- isHorn = ,
-        --maxHorn = ,
-        --isSuspention = ,
-        --maxSuspention = ,
-        --isArmour
-    }
-    local isvehicle = {
-        [0] = veh.isSpoiler,
-        [1] = veh.isBumperF,
-        [2] = veh.isBumperR,
-        [3] = veh.isSkirt,
-        [4] = veh.isExhaust,
-        [5] = veh.isChassis,
-        [6] = veh.isGrill,
-        [7] = veh.isBonnet,
-        [8] = veh.isWingL,
-        [9] = veh.isWingR,
-        [10] = veh.isRoof,
-        [11] = veh.isEngine,
-        --[12] = ,
-        --[12] = ,
-
-    }
-    return veh
 end
 
 CreateThread(function()
@@ -369,7 +400,7 @@ for _,k in pairs(cfg) do
             description = locale('press E to open tuning menu'),
             defaultKey = 'E',
             onPressed = function(self)
-                local vehmods =  GetVehicleMods(vehicle)
+                local vehmods =  GetVehicleMod(vehicle)
                 Wait(2000)
                 OpenTuningMenu()
                 --print(('pressed %s (%s)'):format(self.currentKey, self.name))
@@ -384,6 +415,65 @@ for _,k in pairs(cfg) do
         lib.hideMenu(onExit)
         print('left range of point', self.id)
     end
+end
+
+function VehColor()
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    Wait(50)
+    local properties = lib.getVehicleProperties(vehicle)
+    Wait(100)
+    for i=1, #properties do
+        pc = properties[i].color1
+        sc = properties[i].color2
+        print(json.encode(pc))
+        print(json.encode(sc))
+        print(json.encode(properties))
+    end
+    if not pc or not sc then
+        local input = lib.inputDialog('Farbauswahl - bitte notieren, wenn wichtige Farben.', {
+            {type = 'color', label = 'Primärfarbe', default = '#000000'},
+            {type = 'checkbox', label = 'Matt', checked = true},{type = 'checkbox', label = 'Metallic'},
+            {type = 'color', label = 'Secundärfarbe', default = '#000000'},
+            {type = 'checkbox', label = 'Matt', checked = true},{type = 'checkbox', label = 'Metallic'},
+        })
+        if input == nil then
+            return
+        end
+
+        -- Checkboxen für met, matt etc.
+        if input[2] == true then SetVehicleModColor_1(vehicle, 3,_,_) end
+        if input[3] == true then SetVehicleModColor_1(vehicle, 1,_,_) end
+        if input[5] == true then SetVehicleModColor_2(vehicle, 3,_,_) end
+        if input[6] == true then SetVehicleModColor_2(vehicle, 1,_,_) end
+
+        local r, g, b = Hextorgb(input[1])
+        SetVehicleCustomPrimaryColour(vehicle, r, g, b)
+        Wait(500)
+        local r, g, b = Hextorgb(input[4])
+        SetVehicleCustomSecondaryColour(vehicle, r, g, b)
+        Wait(500)
+        return
+    end
+    local primhexColor = RgbToHex(pc[1], pc[2], pc[3]) or properties[i].color1
+    local sechexColor = RgbToHex(sc[1], sc[2], sc[3])
+
+    local input = lib.inputDialog('Farbauswahl', {
+        {type = 'color', label = 'Primärfarbe', default = '#000000', description = 'Derzeitige Farbe: '..primhexColor..''},
+        {type = 'color', label = 'Secundärfarbe', default = '#000000', description = 'Derzeitige Farbe: '..sechexColor..''},
+    })
+    print(json.encode(input))
+    print(input[1])
+    print(input[2])
+    if input == nil then
+        return
+    end
+    local r, g, b = Hextorgb(input[1])
+    SetVehicleCustomPrimaryColour(vehicle, r, g, b)
+    Wait(500)
+    local r, g, b = Hextorgb(input[2])
+    SetVehicleCustomSecondaryColour(vehicle, r, g, b)
+    Wait(200)
+    SaveTuning(vehicle)
 end
 
 lib.onCache('vehicle', function(vehicle, oldfalue)
@@ -696,7 +786,27 @@ function GetVehicleData(vehicle)
             label = GetModTextLabel(vehicle, 49, is)
         },
     }
+    local paintType1, paintColor1, pearlecentColor = GetVehicleModColor_1(vehicle)
+    local paintName1 = GetVehicleModColor_1Name(vehicle, false)
+    if paintName1 then
+        ColorName1 = paintName1
+    end
+    local paintType2, paintColor2 = GetVehicleModColor_2(vehicle)
+    local paintName2 = GetVehicleModColor_2Name(vehicle)
+        if paintName2 then
+        ColorName2 = paintName2
+    end
+    VehicleData[vehicle].colors = {
+        Type1 = paintType1,
+        Type2 = paintType2,
+        Color1 = paintColor1,
+        Color2 = paintColor2,
+        Pearl = pearlecentColor,
+        Name1 = ColorName1,
+        Name2 = ColorName2
+    }
     lib.print.info(VehicleData[vehicle])
+    Wait(200)
     TriggerServerEvent('tuning:SetVehicleData', source, VehToNet(vehicle), VehicleData[vehicle])
     return VehicleData[vehicle]
 end
